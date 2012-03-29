@@ -177,9 +177,3 @@ function hj_forum_setup_forumpost_form() {
 	}
 	return false;
 }
-
-run_function_once('hj_forum_add_subtypes');
-
-function hj_forum_add_subtypes() {
-	add_subtype('object', 'hjforumtopic', 'hjForumTopic');
-}

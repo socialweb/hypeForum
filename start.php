@@ -240,7 +240,7 @@ function hj_forum_main_menu($hook, $type, $return, $params) {
 			'data-options' => $data,
 			'id' => "hj-ajaxed-addwidget-{$entity->guid}",
 			'class' => "hj-ajaxed-addwidget",
-			'target' => "#elgg-object-{$entity->guid}",
+			'target' => "elgg-object-{$entity->guid}",
 			'priority' => 100
 		);
 		$return[] = ElggMenuItem::factory($widget);
