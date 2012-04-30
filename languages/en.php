@@ -66,8 +66,10 @@ $english = array(
 	'hj:forum:reply:success' => 'Your post was successfully saved',
 	'hj:forum:reply:error' => 'Sorry, your post could not be saved',
 
-	'hj:forum:post_in' => 'Post titled "%s" in a forum topic "%s"'
-	
+	'hj:forum:post_in' => 'Post titled "%s" in a forum topic "%s"',
+
+	'hj:forum:newpost' => 'New post',
+	'hj:forum:widgetdescription' => 'Forum Section',
 );
 
 

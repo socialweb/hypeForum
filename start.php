@@ -10,7 +10,7 @@
  * @copyright Copyrigh (c) 2011, Ismayil Khayredinov
  */
 
-elgg_register_event_handler('init', 'system', 'hj_forum_init');
+elgg_register_event_handler('init', 'system', 'hj_forum_init', 503);
 
 function hj_forum_init() {
 
