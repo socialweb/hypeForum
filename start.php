@@ -170,12 +170,13 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 		$reply = array(
 			'name' => 'reply',
 			'title' => elgg_echo('hj:forum:reply'),
-			'text' => elgg_view('input/button', array('value' => elgg_echo('hj:forum:reply'), 'class' => 'elgg-button-action')),
+			'text' => elgg_echo('hj:forum:reply'),
 			'rel' => 'fancybox',
 			'href' => "action/framework/entities/edit",
 			'data-options' => $data,
 			'class' => "hj-ajaxed-edit",
-			'priority' => 300
+			'priority' => 300,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($reply);
 	}
@@ -187,12 +188,13 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 		$edit = array(
 			'name' => 'edit',
 			'title' => elgg_echo('hj:framework:edit'),
-			'text' => elgg_view('input/button', array('value' => elgg_echo('hj:framework:edit'), 'class' => 'elgg-button-action')),
+			'text' => elgg_echo('hj:framework:edit'),
 			'rel' => 'fancybox',
 			'href' => "action/framework/entities/edit",
 			'data-options' => $data,
 			'class' => "hj-ajaxed-edit",
-			'priority' => 800
+			'priority' => 800,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($edit);
 
@@ -200,11 +202,12 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 		$delete = array(
 			'name' => 'delete',
 			'title' => elgg_echo('hj:framework:delete'),
-			'text' => elgg_view('input/button', array('value' => elgg_echo('hj:framework:delete'), 'class' => 'elgg-button-action')),
+			'text' => elgg_echo('hj:framework:delete'),
 			'href' => "action/framework/entities/delete?e=$entity->guid",
 			'class' => 'hj-ajaxed-remove',
 			'id' => "hj-ajaxed-remove-{$entity->guid}",
 			'priority' => 900,
+			'section' => 'dropdown'
 		);
 		$return[] = ElggMenuItem::factory($delete);
 	}
@@ -256,6 +259,7 @@ function hj_forum_main_menu($hook, $type, $return, $params) {
 			'text' => elgg_view('input/button', array('value' => elgg_echo('hj:framework:edit'), 'class' => 'elgg-button-action')),
 			'rel' => 'fancybox',
 			'href' => "action/framework/entities/edit",
+			'is_action' => true,
 			'data-options' => $data,
 			'class' => "hj-ajaxed-edit",
 			'priority' => 800
@@ -268,6 +272,7 @@ function hj_forum_main_menu($hook, $type, $return, $params) {
 			'title' => elgg_echo('hj:framework:delete'),
 			'text' => elgg_view('input/button', array('value' => elgg_echo('hj:framework:delete'), 'class' => 'elgg-button-action')),
 			'href' => "action/framework/entities/delete?e=$container->guid",
+			'is_action' => true,
 			'class' => 'hj-ajaxed-remove',
 			'id' => "hj-ajaxed-remove-{$entity->guid}",
 			'priority' => 900,

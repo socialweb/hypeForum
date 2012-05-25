@@ -25,4 +25,6 @@ $reply_params = array(
 
 $reply_params = hj_framework_extract_params_from_params($reply_params);
 
+echo "<div id=\"hj-forum-reply-form-$entity->guid\" class=\"hj-forum-reply-form\">";
 echo elgg_view_entity($form, $reply_params);
+echo '</div>';

@@ -59,11 +59,19 @@ foreach ($forum_icons as $icon) {
     font-weight:bold;
 }
 
-.elgg-module-forum .elgg-head {
+.elgg-module-forum > .elgg-head {
     height:30px;
     line-height:30px;
     font-size:14px;
 }
+
+.elgg-module-forum > .elgg-body {
+	width:100%;
+	padding:0;
+	margin:0;
+}
+
+
 
 .hj-forum-topic-menu {
     float:right;
@@ -72,7 +80,9 @@ foreach ($forum_icons as $icon) {
 }
 
 .hj-forum-topic-body {
-    padding:5px 10px;
+    width:95%;
+	padding:2%;
+	margin:0 auto;
     background:#f4f4f4;
     border:1px solid #e8e8e8;
 }
@@ -118,4 +128,11 @@ foreach ($forum_icons as $icon) {
 	margin:3px 0;
 	padding:5px 0;
 	border-bottom:1px solid #e8e8e8;
+}
+
+.elgg-module-main .hj-forum-reply-form {
+	width: 80%;
+	margin: 0 auto;
+	padding: 5%;
+	background: #F4F4F4;
 }

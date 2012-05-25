@@ -14,12 +14,14 @@ if (!elgg_instanceof($owner)) {
 }
 
 if ($full) {
-	$menu = elgg_view_menu('commentshead', array(
+	$params = hj_framework_extract_params_from_entity($entity, array('full_view' => $full));
+	$menu = elgg_view_menu('hjentityhead', array(
 		'entity' => $entity,
 		'handler' => $handler,
 		'class' => 'elgg-menu-entity elgg-menu-hz',
 		'sort_by' => 'priority',
-		'params' => $params
+		'params' => $params,
+		'has_full_view' => false
 			));
 
 	$icon = elgg_view_entity_icon($owner, 'medium', array('use_hover' => false));

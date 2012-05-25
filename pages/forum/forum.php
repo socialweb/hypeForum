@@ -1,17 +1,8 @@
 <?php
 
-
-
-elgg_load_js('hj.framework.ajax');
-elgg_load_js('hj.framework.tabs');
 elgg_load_js('hj.forum.base');
-
 elgg_load_css('hj.forum.base');
 elgg_load_css('hj.framework.profile');
-
-if (elgg_is_admin_logged_in()) {
-    elgg_load_js('hj.framework.tabs.sortable');
-}
 
 $forum_guid = get_input('e');
 $segment_guid = get_input('sg');
