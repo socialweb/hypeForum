@@ -1,7 +1,16 @@
 <?php
 
 $entity = elgg_extract('entity', $vars);
+
 $full = elgg_extract('full_view', $vars, false);
+
+if ($full) {
+	if ($entity->children == 'forumtopic') {
+		echo elgg_view('object/hjforumtopic/forum', $vars);
+	} else {
+		echo elgg_view('object/hjforumtopic/topic', $vars);
+	}
+}
 
 $icon = elgg_view_icon("forum-$entity->icon");
 

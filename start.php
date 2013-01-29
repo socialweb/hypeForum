@@ -10,58 +10,66 @@
  * @copyright Copyrigh (c) 2011, Ismayil Khayredinov
  */
 
-define('HYPEFORUM_RELEASE', 1356044864);
+define('HYPEFORUM_RELEASE', 1359476073);
 
-elgg_register_event_handler('init', 'system', 'hj_forum_init', 503);
+elgg_register_event_handler('init', 'system', 'hj_forum_init');
 
 function hj_forum_init() {
 
 	$plugin = 'hypeForum';
 
-	if (!elgg_is_active_plugin('hypeFramework')) {
-		register_error(elgg_echo('hj:framework:disabled', array($plugin, $plugin)));
+	// Make sure hypeFramework is active and precedes hypeForum in the plugin list
+	if (!is_callable('hj_framework_path_shortcuts')) {
+		register_error(elgg_echo('framework:error:plugin_order', array($plugin)));
 		disable_plugin($plugin);
+		forward('admin/plugins');
 	}
+
+	// Run upgrade scripts
+	hj_framework_check_release($plugin, HYPEFORUM_RELEASE);
 
 	$shortcuts = hj_framework_path_shortcuts($plugin);
 
-// Libraries
-	elgg_register_library('hj:forum:base', $shortcuts['lib'] . 'forum/base.php');
-	elgg_register_library('hj:forum:setup', $shortcuts['lib'] . 'forum/setup.php');
+	// Helper Classes
+	elgg_register_classes($shortcuts['classes']);
 
-// Load PHP library
+	// Libraries
+	elgg_register_library('hj:forum:base', $shortcuts['lib'] . 'forum/base.php');
 	elgg_load_library('hj:forum:base');
 
-// Register pagehandlers for the forum
-	elgg_register_entity_url_handler('object', 'hjforumtopic', 'hj_forumtopic_url_handler');
+	elgg_register_library('hj:forum:forms', $shortcuts['lib'] . 'forum/forms.php');
+	elgg_load_library('hj:forum:forms');
+
+	// Register URL and Page handlers
+	elgg_register_entity_url_handler('object', 'hjforum', 'hj_forum_forum_url_handler');
+	elgg_register_entity_url_handler('object', 'hjforumtopic', 'hj_forum_forumtopic_url_handler');
+	elgg_register_entity_url_handler('object', 'hjforumpost', 'hj_forum_forumpost_url_handler');
 
 	elgg_register_page_handler('forum', 'hj_forum_page_handler');
 
 	elgg_register_menu_item('site', array(
 		'name' => 'forum',
-		'text' => elgg_echo('forum'),
+		'text' => elgg_echo('forums'),
 		'href' => 'forum',
 	));
 
-	$css_url = elgg_get_simplecache_url('css', 'hj/forum/base');
-	elgg_register_css('hj.forum.base', $css_url);
+	// CSS and JS
+	elgg_register_css('hj.forum.base', elgg_get_simplecache_url('css', 'hj/forum/base'));
+	elgg_register_simplecache_view('css/hj/forum/base');
 
-	$js_url = elgg_get_simplecache_url('js', 'hj/forum/base');
-	elgg_register_js('hj.forum.base ', $js_url);
+	elgg_register_js('hj.forum.base ', elgg_get_simplecache_url('js', 'hj/forum/base'));
+	elgg_register_simplecache_view('js/hj/forum/base');
 
+	elgg_register_action('edit/object/hjforum', $shortcuts['actions'] . 'edit/object/hjforum.php');
+	elgg_register_action('edit/object/hjforumtopic', $shortcuts['actions'] . 'edit/object/hjforumtopic.php');
+	elgg_register_action('edit/object/hjforumpost', $shortcuts['actions'] . 'edit/object/hjforumpost.php');
+	elgg_register_action('edit/object/hjforumcategory', $shortcuts['actions'] . 'edit/object/hjforumcategory.php');
+
+	elgg_register_plugin_hook_handler('order_by_clause', 'framework:lists', 'hj_forum_order_by_clauses');
+
+	// ==================	review =====================//
 	// Allow writing to hjforum containers
 	elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'hj_forum_container_permissions_check');
-
-	elgg_register_widget_type('hjforumtopic', elgg_echo('hj:forum:widget'), elgg_echo('hj:forum:widgetdescription'), 'forum', true);
-	elgg_register_plugin_hook_handler('hj:framework:widget:types', 'all', 'hj_forum_get_forum_section_types_hook');
-
-//Check if the initial setup has been performed, if not porform it
-	if (!elgg_get_plugin_setting('hj:forum:setup', 'hypeForum')) {
-		elgg_load_library('hj:forum:setup');
-		if (hj_forum_setup()) {
-			system_message('hypeForum was successfully configured');
-		}
-	}
 
 	elgg_register_plugin_hook_handler('register', 'menu:hjentityhead', 'hj_forum_entity_menu');
 	elgg_register_plugin_hook_handler('register', 'menu:hjsegmenthead', 'hj_forum_main_menu');
@@ -80,17 +88,114 @@ function hj_forum_init() {
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'hj_forum_notify_message');
 }
 
-function hj_forumtopic_url_handler($entity) {
-	return "forum/$entity->guid";
+function hj_forum_forum_url_handler($entity) {
+	
 }
 
-function hj_forum_page_handler($page) {
+function hj_forumtopic_url_handler($entity) {
+	$friendly_title = elgg_get_friendly_title($entity->title);
+	return "forum/view/{$entity->guid}/{$friendly_title}";
+}
+
+function hj_forum_page_handler($page, $handler) {
+
 	$plugin = 'hypeForum';
 	$shortcuts = hj_framework_path_shortcuts($plugin);
 	$pages = $shortcuts['pages'] . 'forum/';
 
 	elgg_load_css('hj.forum.base');
 	elgg_load_js('hj.forum.base');
+
+	elgg_push_breadcrumb(elgg_echo('forums'), 'forum/dashboard/site');
+
+	switch ($page[0]) {
+
+		default :
+		case 'dashboard' :
+
+			$dashboard = elgg_extract(1, $page, 'site');
+			set_input('dashboard', $dashboard);
+
+			switch ($dashboard) {
+
+				default :
+				case 'site' :
+					include "{$pages}dashboard/site.php";
+					break;
+
+				case 'groups' :
+					include "{$pages}dashboard/groups.php";
+					break;
+
+				case 'group' :
+					$group_guid = elgg_extract(2, $page, false);
+					if (!$group_guid) {
+						return false;
+					}
+					set_input('group_guid', $group_guid);
+					include "{$pages}dashboard/group.php";
+					break;
+			}
+
+			break;
+
+		case 'create' :
+
+			list($action, $subtype, $container_guid) = $page;
+
+			if (!$subtype) {
+				return false;
+			}
+
+			if (!$container_guid) {
+				$site = elgg_get_site_entity();
+				$container_guid = $site->guid;
+			}
+
+			elgg_set_page_owner_guid($container_guid);
+
+			set_input('container_guid', $container_guid);
+
+			$include = "{$pages}create/{$subtype}.php";
+
+			if (!file_exists($include)) {
+				return false;
+			}
+
+			include $include;
+			break;
+
+
+		case 'dashboard' :
+			// user's forum dash - latest, bookmarked etc
+			break;
+
+		case 'view' :
+			if (!isset($page[1])) {
+				return false;
+			}
+			set_input('guid', $page[1]);
+			include "{$pages}view.php";
+			break;
+
+		case 'edit' :
+
+			break;
+
+		case 'add' :
+			if (!isset($page[1])) {
+				$page[1] = elgg_get_site_entity()->guid;
+			}
+			set_input('container_guid', $page[1]);
+			if (!isset($page[2])) {
+				$page[2] = 'hjforumtopic';
+			}
+			set_input('object', $page[2]);
+			include "{$pages}add.php";
+			break;
+	}
+
+	return true;
 
 	if ($page[0] == 'sync') {
 		include "{$pages}sync.php";
@@ -423,4 +528,92 @@ function hj_forum_add_last_action($hook, $type, $return, $params) {
 		}
 	}
 	return $return;
+}
+
+function hj_forum_order_by_clauses($hook, $type, $options, $params) {
+
+	$order_by = $params['order_by'];
+	$direction = $params['direction'];
+
+	$prefix = 'e';
+	$column = 'time_created';
+
+	list($prefix, $column) = explode('.', $order_by);
+
+	$prefix = sanitize_string($prefix);
+	$column = sanitize_string($column);
+	$direction = sanitize_string($direction);
+
+	if (!$prefix || !$column) {
+		return $options;
+	}
+
+	if ($prefix !== 'forum') {
+		return $options;
+	}
+
+	$dbprefix = elgg_get_config('dbprefix');
+	switch ($column) {
+
+		case 'title' :
+			$options['joins'][] = "JOIN {$dbprefix}objects_entity forum ON forum.guid = e.guid";
+			$options['order_by'] = "forum.title $direction";
+			break;
+
+		case 'topics' :
+			$ftsid = get_subtype_id('object', 'hjforumtopic');
+			//$fsid = get_subtype_id('object', 'hjforum');
+
+			$options['selects'][] = "count(topic.guid) as topiccount";
+
+			$options['joins'][] = "LEFT JOIN {$dbprefix}entities topic ON (topic.subtype IN ($ftsid))";
+
+			$options['joins'][] = "JOIN {$dbprefix}metadata topicbcmd ON topicbcmd.entity_guid = topic.guid";
+			$options['joins'][] = "JOIN {$dbprefix}metastrings topicbcmsn ON (topicbcmd.name_id = topicbcmsn.id)";
+			$options['joins'][] = "JOIN {$dbprefix}metastrings topicbcmsv ON (topicbcmd.value_id = topicbcmsv.id)";
+
+			$options['wheres'][] = "(topicbcmsn.string = 'breadcrumbs' AND topicbcmsv.string LIKE CONCAT('%\"', e.guid, '\"%'))";
+			$options['wheres'][] = get_access_sql_suffix('topic');
+
+			$options['group_by'] = 'e.guid';
+			$options['order_by'] = "count(topic.guid) $direction, e.time_created DESC";
+			
+			break;
+
+		case 'posts' :
+			$fpsid = get_subtype_id('object', 'hjforumpost');
+
+			$options['selects'][] = "count(post.guid) as postscount";
+
+			$options['joins'][] = "LEFT JOIN {$dbprefix}entities post ON (post.subtype = $fpsid)";
+
+			$options['joins'][] = "JOIN {$dbprefix}metadata postbcmd ON postbcmd.entity_guid = post.guid";
+			$options['joins'][] = "JOIN {$dbprefix}metastrings postbcmsn ON (postbcmd.name_id = postbcmsn.id)";
+			$options['joins'][] = "JOIN {$dbprefix}metastrings postbcmsv ON (postbcmd.value_id = postbcmsv.id)";
+
+			$options['wheres'][] = "(postbcmsn.string = 'breadcrumbs' AND postbcmsv.string LIKE CONCAT('%\"', e.guid, '\"%'))";
+			$options['wheres'][] = get_access_sql_suffix('post');
+
+			$options['group_by'] = 'e.guid';
+			$options['order_by'] = "count(post.guid) $direction, e.time_created DESC";
+			break;
+
+		case 'last_action' :
+			$options['order_by'] = "e.last_action $direction";
+			break;
+
+		default :
+		case 'date' :
+			$options['order_by'] = "e.time_created $direction";
+			break;
+
+		case 'author' :
+			$options['joins'][] = "JOIN {$dbprefix}users_entity ue ON ue.guid = e.owner_guid";
+			$options['order_by'] = "ue.name $direction";
+			break;
+	}
+
+	print_r($options);
+	
+	return $options;
 }

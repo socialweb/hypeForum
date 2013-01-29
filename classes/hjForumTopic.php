@@ -1,6 +1,6 @@
 <?php
 
-class hjForumTopic extends ElggObject {
+class hjForumTopic extends hjObject {
 
 	protected function initializeAttributes() {
 		parent::initializeAttributes();

@@ -3,8 +3,24 @@
 $english = array(
 
     'forum' => 'Forum',
+	'forums' => 'Forums',
+	'hj:forum:siteforums' => 'Site-wide Forums',
+	
+	// Form Elements
+	'edit:object:hjforum:icon' => 'Cover Image',
+	'edit:object:hjforum:title' => 'Forum Title',
+	'edit:object:hjforum:description' => 'Subtitle',
+	'edit:object:hjforum:access_id' => 'Visibility',
+	'edit:object:hjforum:category' => 'Category',
+
+	'edit:object:hjforumcategory:title' => 'Category Name',
+	'edit:object:hjforumcategory:description' => 'Brief Description',
+
+
+	'hj:forum:instance:mainforum' => 'Discussions',
     'hj:forum:forums' => 'Forum',
     'hj:forum:siteforum' => 'Site Forum',
+
 	'item:object:hjforumtopic' => 'Forum Topic',
 	'items:object:hjforumtopic' => 'Forum Topics',
 	'search_types:hjforumpost' => 'Forum Posts',
@@ -70,6 +86,16 @@ $english = array(
 
 	'hj:forum:newpost' => 'New post',
 	'hj:forum:widgetdescription' => 'Forum Section',
+
+	'hj:forum:dashboard:site' => 'Site-wide Forums',
+	'hj:forum:dashboard:groups' => 'Group Forums',
+
+	'hj:forum:dashboard:tabs:site' => 'Site-wide Forums',
+	'hj:forum:dashboard:tabs:groups' => 'Group Forums',
+	'hj:forum:create:forum' => 'New Forum',
+	'hj:forum:create:category' => 'New Category',
+
+	
 );
 
 
