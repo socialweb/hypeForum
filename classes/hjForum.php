@@ -33,5 +33,43 @@ class hjForum extends hjObject {
 		return ($posts) ? $posts[0] : false;
 	}
 
+	public function getURL() {
+		$friendly_title = elgg_get_friendly_title($this->getTitle());
+		return elgg_get_site_url() . "forum/view/$this->guid/$friendly_title";
+	}
+
+	public function getEditURL() {
+		return elgg_get_site_url() . "forum/edit/$this->guid";
+	}
+
+	public function isOpenFor($subtype = null) {
+
+		if ($this->status == 'closed')
+			return false;
+
+		return true;
+	}
+
+	public function isStiky() {
+		if ($this->sticky == true) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function hasCategories() {
+		$options = array(
+			'types' => 'object',
+			'subtypes' => 'hjforumcategory',
+			'count' => true,
+			'container_guid' => $this->guid
+		);
+
+		$categories = elgg_get_entities($options);
+
+		return ($categories);
+	}
+
 }
 

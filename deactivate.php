@@ -1,7 +1,10 @@
 <?php
 
 $subtypes = array(
-	'hjforumtopic' => 'hjForumTopic'
+	'hjforum' => 'hjForum',
+	'hjforumtopic' => 'hjForumTopic',
+	'hjforumpost' => 'hjForumPost',
+	'hjforumcategory' => 'hjForumCategory'
 );
 
 foreach ($subtypes as $subtype => $class) {

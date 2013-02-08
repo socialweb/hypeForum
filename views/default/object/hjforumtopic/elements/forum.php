@@ -1,10 +1,9 @@
 <?php
 
-$vars['size'] = 'tiny';
+$entity = $vars['entity'];
 
-if ($vars['entity']->icontime) {
-	$icon = elgg_view('framework/bootstrap/entity/icon', $vars);
-}
+$icon = elgg_view_icon("forum-$entity->icon");
+
 $title = elgg_view('framework/bootstrap/entity/title', $vars);
 $description = elgg_view('framework/bootstrap/entity/briefdescription', $vars);
 

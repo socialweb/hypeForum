@@ -1,14 +1,18 @@
 <?php
 
 $container_guid = get_input('container_guid');
-$container = get_entity($container_guid);
 
-if (elgg_instanceof($container, 'site')) {
-	elgg_push_breadcrumb(elgg_echo('hj:forum:dashboard:site'), 'forum/dashboard/site');
-} else if (elgg_instanceof($container, 'group')) {
-	elgg_push_breadcrumb(elgg_echo('hj:forum:dashboard:site'), "forum/dashboard/group/$container->guid");
-} else if (elgg_instanceof($container, 'hjforumtopic')) {
-	
+$ancestry = hj_framework_get_ancestry($container_guid);
+
+foreach ($ancestry as $ancestor) {
+	if (elgg_instanceof($ancestor, 'site')) {
+		// do nothing
+	} else if (elgg_instanceof($ancestor, 'group')) {
+		elgg_set_page_owner_guid($ancestor->guid);
+		elgg_push_breadcrumb($ancestor->name, $ancestor->getURL());
+	} else if (elgg_instanceof($ancestor, 'object')) {
+		elgg_push_breadcrumb($ancestor->title, $ancestor->getURL());
+	}
 }
 
 $title = elgg_echo('hj:forum:create:forum');

@@ -4,7 +4,8 @@
 
 run_function_once('hj_forum_1358206168');
 run_function_once('hj_forum_1358285155');
-run_function_once('hj_forum_1359476073');
+run_function_once('hj_forum_1359738428');
+run_function_once('hj_forum_1360277917');
 
 function hj_forum_1358206168() {
 
@@ -153,7 +154,7 @@ function hj_forum_1358285155() {
 	elgg_set_ignore_access($ia);
 }
 
-function hj_forum_1359476073() {
+function hj_forum_1359738428() {
 
 	$ia = elgg_set_ignore_access(true);
 
@@ -164,30 +165,34 @@ function hj_forum_1359476073() {
 	$subtypes_in = implode(',', $subtypes);
 
 	$dbprefix = elgg_get_config('dbprefix');
-	$query = "SELECT guid, container_guid, owner_guid, access_id FROM {$dbprefix}entities e WHERE e.subtype IN ($subtypes_in)";
+	$query = "SELECT guid
+				FROM {$dbprefix}entities e
+				WHERE e.subtype IN ($subtypes_in)";
+				
 	$data = get_data($query);
 
-	$keyval = array();
-
 	foreach ($data as $e) {
-		$keyval[$e->guid] = $e->container_guid;
-	}
-
-	foreach ($keyval as $key => $val) {
-
-		$guid = $key;
-		$container_guid = $val;
-
-		$breadcrumbs = array("$guid");
-
-		while(array_key_exists($container_guid, $keyval) || array_search($container_guid, $keyval)) {
-			array_unshift($breadcrumbs, $container_guid);
-			$container_guid = $keyval[$container_guid];
-		}
-
-		create_metadata($guid, 'breadcrumbs', json_encode($breadcrumbs), '', 0, ACCESS_PUBLIC);
-		
+		hj_framework_set_ancestry($e->guid);
 	}
 
 	elgg_set_ignore_access($ia);
+}
+
+function hj_forum_1360277917() {
+
+	$dbprefix = elgg_get_config('dbprefix');
+
+	$query = "	UPDATE {$dbprefix}metastrings msv
+				JOIN {$dbprefix}metadata md ON md.value_id = msv.id
+				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
+				SET msv.string = 1
+				WHERE msn.string = 'sticky' AND msv.string = 'true'	";
+
+	update_data($query);
+
+	elgg_delete_metadata(array(
+		'metadata_names' => 'sticky',
+		'metadata_values' => 'false',
+		'limit' => 0
+	));
 }

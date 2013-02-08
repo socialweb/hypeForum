@@ -1,57 +1,22 @@
 <?php
 
-$categories = elgg_get_entities(array(
+$site = elgg_get_site_entity();
+
+$options = array(
 	'types' => 'object',
 	'subtypes' => 'hjforumcategory',
 	'limit' => 0,
-	'container_guid' => elgg_get_site_entity()->guid
-		));
+	'container_guid' => $site->guid
+);
 
-foreach ($categories as $category) {
+$options = hj_framework_get_order_by_clause('md.priority', 'ASC', $options);
 
-	echo $category->title;
-	$getter_options = array(
-		'types' => 'object',
-		'subtypes' => 'hjforum',
-		'limit' => 0,
-//		'relationship' => 'filed_in',
-//		'relationship_guid' => $category->guid,
-//		'inverse_relationship' => true,
-	);
+$categories = elgg_get_entities($options);
 
-	$list_options = array(
-		'list_type' => 'table',
-		'list_view_options' => array(
-			'table' => array(
-				'head' => array(
-					'forum' => array(
-						'text' => elgg_echo('hj:forum:tablecol:forum'),
-						'sortable' => true,
-						'sort_key' => 'forum.title',
-					),
-					'topics' => array(
-						'text' => elgg_echo('hj:forum:tablecol:topics'),
-						'sortable' => true,
-						'sort_key' => 'forum.topics'
-					),
-					'posts' => array(
-						'text' => elgg_echo('hj:forum:tablecol:posts'),
-						'sortable' => true,
-						'sort_key' => 'forum.posts'
-					),
-					'last_post' => array(
-						'text' => elgg_echo('hj:forum:tablecol:last_post'),
-						'sortable' => true,
-						'sort_key' => 'forum.posts'
-					),
-				)
-			)
-		)
-	);
+echo elgg_view_entity_list($categories, array(
+	'list_class' => 'forum-category-list'
+));
 
-	$viewer_options = array(
-		'full_view' => true
-	);
-
-	echo hj_framework_view_list("site-forums-$category->guid", $getter_options, $list_options, $viewer_options, 'elgg_get_entities_from_relationship');
-}
+//$vars['entity'] = $site;
+//$vars['subtypes'] = array('hjforum');
+//echo elgg_view('hj/forum/modules/uncategorized', $vars);

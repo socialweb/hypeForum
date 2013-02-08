@@ -7,3 +7,4 @@ if (!$entity) {
 }
 
 echo $entity->countTopics(true);
+

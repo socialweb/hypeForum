@@ -7,6 +7,9 @@ class hjForumCategory extends hjCategory {
 		$this->attributes['subtype'] = "hjforumcategory";
 	}
 
+	public function getURL() {
+		return $this->getContainerEntity()->getURL();
+	}
 }
 
 ?>

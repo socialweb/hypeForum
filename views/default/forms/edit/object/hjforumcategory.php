@@ -1,8 +1,4 @@
 <?php
 
-$vars['form_name'] = $form_name = 'edit:object:hjforumcategory';
-
-$config = elgg_get_config('framework:config:forms');
-$vars['form'] = $config[$form_name];
-
-echo elgg_view('framework/bootstrap/form', $vars);
+$params = elgg_clean_vars($vars);
+echo hj_framework_view_form('edit:object:hjforumcategory', $params);
