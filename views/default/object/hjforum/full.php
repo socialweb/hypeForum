@@ -21,7 +21,6 @@ IF (HYPEFORUM_CATEGORIES && $entity->enable_subcategories) {
 
 	$options = hj_framework_get_order_by_clause('md.priority', 'ASC', $options);
 
-
 	$categories = elgg_get_entities($options);
 
 	if ($categories) {

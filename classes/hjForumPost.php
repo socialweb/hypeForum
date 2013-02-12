@@ -11,6 +11,7 @@ class hjForumPost extends hjForumTopic {
 		$return = parent::save();
 
 		if ($return) {
+			$this->getContainerEntity()->createSubscription();
 			$this->setAncestry();
 		}
 

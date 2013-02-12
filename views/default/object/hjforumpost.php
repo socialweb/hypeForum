@@ -11,6 +11,15 @@ $user = $entity->getOwnerEntity();
 
 $friendly_time = date("F j, Y - ga T", $entity->time_created);
 
+if (HYPEFORUM_STICKY && $entity->isSticky()) {
+	$icon = elgg_view('output/img', array(
+		'src' => elgg_get_site_url() . 'mod/hypeForum/graphics/forumtopic/sticky.png',
+		'height' => $config['tiny']['h'],
+		'width' => $config['tiny']['w'],
+		'title' => elgg_echo('hj:forum:sticky')
+			));
+}
+
 if ($full) {
 	$author = elgg_view('object/hjforumpost/elements/author', array('user' => $user));
 
@@ -19,7 +28,7 @@ if ($full) {
 	$menu = elgg_view('framework/bootstrap/object/elements/menu', $vars);
 
 
-	echo elgg_view_image_block($author, $friendly_time . $description, array(
+	echo elgg_view_image_block($author, $icon . $friendly_time . $description, array(
 		'image_alt' => $menu
 	));
 } else {

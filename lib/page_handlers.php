@@ -35,6 +35,14 @@ function hj_forum_page_handler($page, $handler) {
 				case 'groups' :
 					include "{$pages}dashboard/groups.php";
 					break;
+
+				case 'bookmarks' :
+					include "{$pages}dashboard/bookmarks.php";
+					break;
+
+				case 'subscriptions' :
+					include "{$pages}dashboard/subscriptions.php";
+					break;
 			}
 
 			break;
@@ -51,7 +59,7 @@ function hj_forum_page_handler($page, $handler) {
 			}
 
 			elgg_set_page_owner_guid($group->guid);
-			
+
 			include "{$pages}dashboard/group.php";
 			break;
 
@@ -105,7 +113,9 @@ function hj_forum_page_handler($page, $handler) {
 			if (!$entity)
 				return false;
 
-			$sidebar = elgg_view('framework/forum/dashboard/sidebar');
+			if (elgg_instanceof($entity, 'object', 'hjforum')) {
+				$sidebar = elgg_view('framework/forum/dashboard/sidebar');
+			}
 
 			echo elgg_view_page($entity->title, elgg_view_layout('entity', array('entity' => $entity, 'sidebar' => $sidebar)));
 			break;

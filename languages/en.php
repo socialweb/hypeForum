@@ -72,6 +72,7 @@ $english = array(
 	'edit:plugin:hypeforum:params[categories]' => 'Enable categories for nested forums and topics',
 	'edit:plugin:hypeforum:params[subforums]' => 'Enable sub-forums',
 	'edit:plugin:hypeforum:params[forum_cover]' => 'Enable cover images for forums',
+	'edit:plugin:hypeforum:params[forum_sticky]' => 'Enable sticky topics',
 	'edit:plugin:hypeforum:params[forum_topic_cover]' => 'Enable cover images for topics',
 	'edit:plugin:hypeforum:params[forum_topic_icon]' => 'Enable topic icons',
 	'edit:plugin:hypeforum:params[forum_topic_icon_types]' => 'List of topic icon types',
@@ -95,6 +96,12 @@ $english = array(
 	'hj:forum:group' => 'Group forums',
 
 	'hj:forum:dashboard:group' => '%s\'s Forums',
+
+	'edit:object:hjforum:sticky' => 'Sticky Topic',
+	'hj:forum:sticky' => 'Sticky Topic',
+
+	
+	
 	
 );
 

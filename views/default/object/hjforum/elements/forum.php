@@ -1,8 +1,9 @@
 <?php
 
-$vars['size'] = 'tiny';
+$entity = elgg_extract('entity', $vars);
 
 if ($vars['entity']->icontime) {
+	$vars['size'] = 'tiny';
 	$icon = elgg_view('framework/bootstrap/object/elements/icon', $vars);
 }
 
@@ -11,6 +12,8 @@ if (elgg_in_context('groups') && !elgg_instanceof(elgg_get_page_owner_entity(), 
 }
 
 $title = elgg_view('framework/bootstrap/object/elements/title', $vars);
+$title = elgg_view_image_block($icon, $title);
+
 $description = elgg_view('framework/bootstrap/object/elements/briefdescription', $vars);
 
-echo elgg_view_image_block($icon, $breadcrumbs . $title . $description);
+echo elgg_view_module('forumtopic', $breadcrumbs . $title, $description);

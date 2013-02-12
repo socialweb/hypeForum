@@ -15,6 +15,7 @@ define('HYPEFORUM_RELEASE', 1360277917);
 define('HYPEFORUM_CATEGORIES', elgg_get_plugin_setting('categories', 'hypeForum'));
 define('HYPEFORUM_CATEGORIES_TOP', elgg_get_plugin_setting('categories_top', 'hypeForum'));
 define('HYPEFORUM_SUBFORUMS', elgg_get_plugin_setting('subforums', 'hypeForum'));
+define('HYPEFORUM_STICKY', elgg_get_plugin_setting('forum_sticky', 'hypeForum'));
 define('HYPEFORUM_FORUM_COVER', elgg_get_plugin_setting('forum_cover', 'hypeForum'));
 define('HYPEFORUM_FORUM_TOPIC_COVER', elgg_get_plugin_setting('forum_topic_cover', 'hypeForum'));
 define('HYPEFORUM_FORUM_TOPIC_ICON', elgg_get_plugin_setting('forum_topic_icon', 'hypeForum'));

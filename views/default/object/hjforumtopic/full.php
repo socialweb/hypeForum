@@ -41,9 +41,10 @@ if ($goto_guid) {
 	$offset = hj_framework_get_descendant_offset($goto_guid, $getter_options);
 	if ($offset > $limit) {
 		$offset = (ceil($offset / $limit) * $limit) - $limit;
+	} else {
+		$offset = 0;
 	}
 	set_input("__off_$list_id", $offset);
-	set_input("__limi_$list_id", $limit);
 }
 
 if (!get_input("__ord_$list_id", false)) {

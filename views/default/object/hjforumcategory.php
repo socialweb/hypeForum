@@ -35,11 +35,11 @@ $subtype_ids = implode(',', array(
 
 $dbprefix = elgg_get_config('dbprefix');
 $getter_options = array(
-	'selects' => array("CAST(stickymsv.string AS SIGNED) AS sticky"),
+	'selects' => array("CAST(stickymsv.string AS SIGNED) AS stickyval"),
 	'joins' => array(
 		"JOIN {$dbprefix}metadata stickymd ON e.guid = stickymd.entity_guid",
-		"LEFT JOIN {$dbprefix}metastrings stickymsn ON (stickymd.name_id = stickymsn.id AND stickymsn.string = 'sticky')",
-		"LEFT JOIN {$dbprefix}metastrings stickymsv ON (stickymd.value_id = stickymsv.id)"
+		"JOIN {$dbprefix}metastrings stickymsn ON (stickymsn.string = 'sticky')",
+		"LEFT JOIN {$dbprefix}metastrings stickymsv ON (stickymd.name_id = stickymsn.id AND stickymd.value_id = stickymsv.id)"
 	),
 	'types' => 'object',
 	'subtypes' => array('hjforum', 'hjforumtopic'),
@@ -47,7 +47,7 @@ $getter_options = array(
 	'relationship_guid' => $category->guid,
 	'inverse_relationship' => true,
 	'group_by' => 'e.guid',
-	'order_by' => "FIELD(e.subtype, $subtype_ids), FIELD(sticky, 1, NULL)"
+	'order_by' => "FIELD(e.subtype, $subtype_ids), ISNULL(stickyval), stickyval DESC"
 );
 
 $list_options = array(
@@ -90,17 +90,17 @@ $viewer_options = array(
 	'full_view' => true
 );
 
-if (!get_input("__ord_$list_id", false)) {
-	set_input("__ord_$list_id", 'e.last_action');
-	set_input("__dir_$list_id", 'DESC');
-}
+//if (!get_input("__ord_$list_id", false)) {
+//	set_input("__ord_$list_id", 'e.last_action');
+//	set_input("__dir_$list_id", 'DESC');
+//}
 
 $content .= hj_framework_view_list($list_id, $getter_options, $list_options, $viewer_options, 'elgg_get_entities_from_relationship');
 
 $module = elgg_view_module('forum-category', $title, $content);
 
 if ($entity->canEdit()) {
-	$module = "<div class=\"hj-draggable-element\" data-uid=\"$entity->guid\">$module</div>";
+	$module = "<div id=\"uid-$entity->guid\"class=\"hj-draggable-element\" data-uid=\"$entity->guid\">$module</div>";
 }
 
 echo $module;

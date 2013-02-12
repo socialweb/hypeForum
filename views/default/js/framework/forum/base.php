@@ -22,19 +22,11 @@
 
 	framework.forum.orderCategories = function(event, ui) {
 
-		var data = new Object();
-		data.priorities = new Array();
-		
-		ui.item.closest('.forum-category-list').find('.hj-draggable-element').each(function(key, item) {
-			data.priorities[key] = {
-				priority : key*100,
-				guid : $(item).data('uid')
-			}
-		})
+		var data = ui.item
+		.closest('.forum-category-list')
+		.sortable('serialize');
 
-		elgg.action('forum/order/categories', {
-			data: data
-		});
+		elgg.action('action/forum/order/categories?' + data);
 
 		// @hack fixes jquery-ui/opera bug where draggable elements jump
 		ui.item.css('top', 0);

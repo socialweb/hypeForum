@@ -15,12 +15,13 @@ function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
 		'categories',
 		'subforums',
 		'forum_cover',
+		'forum_sticky',
 		'forum_topic_cover',
 		'forum_topic_icon',
 		'forum_forum_river',
 		'forum_topic_river',
 		'forum_post_river',
-		'forum_subscriptions',
+		//'forum_subscriptions',
 		'forum_bookmarks',
 		'forum_group_forums'
 	);
@@ -148,6 +149,15 @@ function hj_forum_init_forumtopic_form($hook, $type, $return, $params) {
 				'class' => 'elgg-input-longtext',
 				'ltrequired' => true // hack for tinymce longtext
 			),
+			'sticky' => (HYPEFORUM_STICKY && elgg_is_admin_logged_in()) ? array(
+				'input_type' => 'checkboxes',
+				'options' => array(
+					elgg_echo('edit:object:hjforum:sticky') => 1
+				),
+				'value' => $entity->sticky,
+				'label' => false,
+				'default' => false
+					) : null,
 			'category' => (HYPEFORUM_CATEGORIES) ? hj_forum_get_forum_category_input_options($entity, $container) : null,
 			'access_id' => array(
 				'value' => $entity->access_id,

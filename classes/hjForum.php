@@ -60,7 +60,7 @@ class hjForum extends hjObject {
 		return true;
 	}
 
-	public function isStiky() {
+	public function isSticky() {
 		if ($this->sticky == true) {
 			return true;
 		}
