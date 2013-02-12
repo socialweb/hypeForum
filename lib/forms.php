@@ -1,9 +1,51 @@
 <?php
 
+elgg_register_plugin_hook_handler('init', 'form:edit:plugin:hypeforum', 'hj_forum_init_plugin_settings_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforum', 'hj_forum_init_forum_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforumtopic', 'hj_forum_init_forumtopic_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforumpost', 'hj_forum_init_forumpost_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforumcategory', 'hj_forum_init_forumcategory_form');
+
+function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+
+	$settings = array(
+		'categories_top',
+		'categories',
+		'subforums',
+		'forum_cover',
+		'forum_topic_cover',
+		'forum_topic_icon',
+		'forum_forum_river',
+		'forum_topic_river',
+		'forum_post_river',
+		'forum_subscriptions',
+		'forum_bookmarks',
+		'forum_group_forums'
+	);
+
+	foreach ($settings as $s) {
+		$config['fields']["params[$s]"] = array(
+			'input_type' => 'dropdown',
+			'options_values' => array(
+				0 => elgg_echo('disable'),
+				1 => elgg_echo('enable')
+			),
+			'value' => $entity->$s
+		);
+	}
+
+	$default_types = array('default', 'star', 'heart', 'question', 'important', 'info', 'idea', 'laugh', 'surprise', 'lightning', 'announcement', 'lock');
+	$config['fields']['params[forum_topic_icon_types]'] = array(
+		'value' => (isset($entity->forum_topic_icon_types)) ? $entity->forum_topic_icon_types : implode(',', $default_types),
+		'hint' => elgg_echo('edit:plugin:hypeforum:topic_icon_hint')
+	);
+
+	$config['buttons'] = false;
+	
+	return $config;
+}
 
 function hj_forum_init_forum_form($hook, $type, $return, $params) {
 
@@ -26,11 +68,11 @@ function hj_forum_init_forum_form($hook, $type, $return, $params) {
 				'input_type' => 'hidden',
 				'value' => 'hjforum'
 			),
-			'icon' => array(
+			'cover' => (HYPEFORUM_FORUM_COVER) ? array(
 				'input_type' => 'entity_icon',
 				'value_type' => 'file',
 				'value' => (isset($entity->icontime))
-			),
+					) : null,
 			'title' => array(
 				'value' => $entity->title,
 				'required' => true
@@ -38,17 +80,26 @@ function hj_forum_init_forum_form($hook, $type, $return, $params) {
 			'description' => array(
 				'value' => $entity->description,
 				'input_type' => 'longtext',
-				'class' => 'elgg-input-longtext'
+				'class' => 'elgg-input-longtext',
 			),
-			'category' => hj_forum_get_forum_category_input_options($entity, $container),
+			'category' => (HYPEFORUM_CATEGORIES_TOP) ? hj_forum_get_forum_category_input_options($entity, $container) : null,
+			'enable_subcategories' => (HYPEFORUM_CATEGORIES) ? array(
+				'input_type' => 'checkboxes',
+				'options' => array(
+					elgg_echo('edit:object:hjforum:enable_subcategories') => 1
+				),
+				'value' => $entity->enable_subcategories,
+				'label' => false,
+				'default' => false
+					) : null,
 			'access_id' => array(
 				'value' => $entity->access_id,
 				'input_type' => 'access'
 			),
-			'add_to_river' => array(
+			'add_to_river' => (HYPEFORUM_FORUM_RIVER) ? array(
 				'input_type' => 'hidden',
 				'value' => ($entity) ? false : true
-			)
+					) : null
 		)
 	);
 
@@ -63,7 +114,7 @@ function hj_forum_init_forumtopic_form($hook, $type, $return, $params) {
 
 	$config = array(
 		'attributes' => array(
-//			'enctype' => 'multipart/form-data',
+			'enctype' => 'multipart/form-data',
 			'id' => 'form-edit-object-hjforumtopic',
 			'action' => 'action/edit/object/hjforumtopic'
 		),
@@ -76,12 +127,17 @@ function hj_forum_init_forumtopic_form($hook, $type, $return, $params) {
 				'input_type' => 'hidden',
 				'value' => 'hjforumtopic'
 			),
-			'icon' => array(
+			'cover' => (HYPEFORUM_FORUM_TOPIC_COVER) ? array(
+				'input_type' => 'entity_icon',
+				'value_type' => 'file',
+				'value' => (isset($entity->icontime))
+					) : null,
+			'icon' => (HYPEFORUM_FORUM_TOPIC_ICON) ? array(
 				'input_type' => 'radio',
 				'options' => hj_forum_get_forum_icons($entity, $container),
 				'class' => 'elgg-horizontal',
 				'value' => ($entity) ? $entity->icon : 'default'
-			),
+					) : null,
 			'title' => array(
 				'value' => $entity->title,
 				'required' => true
@@ -92,15 +148,15 @@ function hj_forum_init_forumtopic_form($hook, $type, $return, $params) {
 				'class' => 'elgg-input-longtext',
 				'ltrequired' => true // hack for tinymce longtext
 			),
-			'category' => hj_forum_get_forum_category_input_options($entity, $container),
+			'category' => (HYPEFORUM_CATEGORIES) ? hj_forum_get_forum_category_input_options($entity, $container) : null,
 			'access_id' => array(
 				'value' => $entity->access_id,
 				'input_type' => 'access'
 			),
-			'add_to_river' => array(
+			'add_to_river' => (HYPEFORUM_TOPIC_RIVER) ? array(
 				'input_type' => 'hidden',
 				'value' => ($entity) ? false : true
-			)
+					) : null
 		)
 	);
 
@@ -115,7 +171,7 @@ function hj_forum_init_forumpost_form($hook, $type, $return, $params) {
 
 	$config = array(
 		'attributes' => array(
-//			'enctype' => 'multipart/form-data',
+			'enctype' => 'multipart/form-data',
 			'id' => 'form-edit-object-hjforumpost',
 			'action' => 'action/edit/object/hjforumpost'
 		),
@@ -132,15 +188,6 @@ function hj_forum_init_forumpost_form($hook, $type, $return, $params) {
 				'input_type' => 'hidden',
 				'value' => "Re: $entity->title",
 			),
-			'quote' => array(
-				'input_type' => 'hidden',
-				'value' => get_input('quote', false)
-			),
-			'quote_body' => ($container) ? array(
-				'input_type' => 'hidden',
-				'override_view' => 'output/longtext',
-				'value' => $congainer->description
-			) : false,
 			'description' => array(
 				'value' => $entity->description,
 				'input_type' => 'longtext',
@@ -151,12 +198,24 @@ function hj_forum_init_forumpost_form($hook, $type, $return, $params) {
 				'value' => ($entity) ? $entity->access_id : $container->access_id,
 				'input_type' => 'hidden'
 			),
-			'add_to_river' => array(
+			'add_to_river' => (HYPEFORUM_POST_RIVER) ? array(
 				'input_type' => 'hidden',
 				'value' => ($entity) ? false : true
-			)
+					) : null
 		)
 	);
+
+	$quote = get_input('quote', false);
+	if (!$entity && $quote) {
+		$quoted_entity = get_entity($quote);
+		if ($quoted_entity) {
+			$config['fields']['description']['value'] = elgg_view('framework/forum/quote', array('entity' => $quoted_entity));
+			$config['fields']['quote'] = array(
+				'input_type' => 'hidden',
+				'value' => $quote
+			);
+		}
+	}
 
 	return $config;
 }
@@ -203,6 +262,10 @@ function hj_forum_get_forum_category_input_options($entity = null, $container = 
 	if (!$entity && !$container)
 		return false;
 
+	if (elgg_instanceof($container, 'object', 'hjforum') && !$container->enable_subcategories) {
+		return false;
+	}
+
 	$dbprefix = elgg_get_config('dbprefix');
 	$categories = elgg_get_entities(array(
 		'types' => 'object',
@@ -222,7 +285,7 @@ function hj_forum_get_forum_category_input_options($entity = null, $container = 
 			$categories = $entity->getCategories('hjforumcategory');
 			$value = $categories[0]->guid;
 		}
-		
+
 		$options = array(
 			'input_type' => 'dropdown',
 			'options_values' => $options_values,
@@ -230,8 +293,7 @@ function hj_forum_get_forum_category_input_options($entity = null, $container = 
 		);
 	} else {
 
-		if ((elgg_instanceof($container, 'site') && elgg_is_admin_logged_in()) ||
-				($container->canAdminister())) {
+		if ($container->canWriteToContainer(0, 'object', 'hjforumcategory')) {
 			$options = array(
 				'input_type' => 'text',
 				'override_view' => 'output/url',
@@ -247,12 +309,20 @@ function hj_forum_get_forum_category_input_options($entity = null, $container = 
 }
 
 function hj_forum_get_forum_icons($entity = null, $container = null) {
-	$options = array('default', 'star', 'heart', 'question', 'important', 'info', 'idea', 'laugh', 'surprise', 'lightning', 'announcement', 'lock');
+	$options = elgg_get_plugin_setting('forum_topic_icon_types', 'hypeForum');
+	$options = array_map('trim', explode(',', $options));
 
-	$options = elgg_trigger_plugin_hook('hj:forum:icons', 'all', null, $options);
+	$options = elgg_trigger_plugin_hook('hj:forum:icons', 'all', array(
+		'entity' => $entity,
+		'container' => $container
+			), $options);
 
 	foreach ($options as $option) {
-		$label = elgg_view_icon("forum-$option");
+		$label = elgg_view('output/img', array(
+			'src' => elgg_get_site_url() . 'mod/hypeForum/graphics/forumtopic/' . $option . '.png',
+			'width' => 16,
+			'height' => 16
+		));
 		$options_values["$label"] = $option;
 	}
 

@@ -8,19 +8,23 @@ $container = $entity->getContainerEntity();
 
 if ($container->canEdit()) {
 	$handle = elgg_view_icon('cursor-drag-arrow', 'hj-draggable-element-handle');
-	$title = "$handle$title";
 }
 
 $params = array(
 	'entity' => $entity,
 	'class' => 'elgg-menu-hjentityhead elgg-menu-hz elgg-menu-forum-category',
 	'sort_by' => 'priority',
-	'handler' => 'forumcategory'
+	'handler' => 'forumcategory',
+	'dropdown' => false
 );
 
-$title .= elgg_view_menu('hjentityhead', $params);
+$menu = elgg_view_menu('hjentityhead', $params);
 
-$content = elgg_view('framework/bootstrap/entity/description', $vars);
+$title = elgg_view_image_block($handle, $title, array(
+	'image_alt' => $menu
+));
+
+$content = elgg_view('framework/bootstrap/object/elements/description', $vars);
 
 $list_id = "fc$category->guid";
 
@@ -79,11 +83,7 @@ $list_options = array(
 			)
 		)
 	),
-	'pagination' => true,
-	'filter' => elgg_view('hj/forum/filters/forums', array(
-		'list_id' => $list_id
-	)),
-	'filter_callback' => 'hj_forum_filter_forum_list'
+	'pagination' => true
 );
 
 $viewer_options = array(

@@ -7,6 +7,16 @@ class hjForum extends hjObject {
 		$this->attributes['subtype'] = "hjforum";
 	}
 
+	public function save() {
+		$return = parent::save();
+
+		if ($return) {
+			$this->setAncestry();
+		}
+
+		return $return;
+	}
+	
 	public function countTopics($recursive = false) {
 		return $this->getLatestTopics(0, true, $recursive);
 	}

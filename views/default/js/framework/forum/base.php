@@ -17,57 +17,6 @@
 			revert:               500,
 			stop:                 framework.forum.orderCategories
 		});
-
-		$('form#form-edit-object-hjforumpost')
-		.submit(function(eventSubmit) {
-
-			$form = $(this);
-
-			var data = new Object();
-			data['X-Requested-With'] = 'XMLHttpRequest';
-			data.view = 'xhr'; // set viewtype
-			data.endpoint = 'layout'; // 'pageshell', 'layout', 'layout-elements'
-
-			var params = ({
-				dataType : 'json',
-				data : data,
-				beforeSend : function() {
-					elgg.system_message(elgg.echo('hj:framework:ajax:saving'));
-				},
-				complete : function() {
-				},
-				success : function(response, status, xhr) {
-
-					var hookParams = new Object();
-					response.event = 'submitForm';
-					hookParams.response = response;
-					hookParams.data = $form.serialize();
-
-					elgg.trigger_hook('ajax:success', 'framework', hookParams, true);
-
-					if (response.status < 0) {
-						$element.trigger('click');
-						return false;
-					}
-
-					hookParams.href = framework.ajax.updateUrlQuery(window.location.href, { '__goto' : response.output.guid });
-					elgg.trigger_hook('refresh:lists', 'framework', hookParams);
-
-					$form.resetForm();
-
-				}
-			});
-
-			if ($form.find('input[type=file]')) {
-				params.iframe = true;
-			} else {
-				params.iframe = false;
-			}
-
-			$form.ajaxSubmit(params);
-
-			return false;
-		})
 		
 	}
 

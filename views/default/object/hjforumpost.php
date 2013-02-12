@@ -15,8 +15,8 @@ if ($full) {
 	$author = elgg_view('object/hjforumpost/elements/author', array('user' => $user));
 
 
-	$description = elgg_view('framework/bootstrap/entity/description', $vars);
-	$menu = elgg_view('framework/bootstrap/entity/menu', $vars);
+	$description = elgg_view('framework/bootstrap/object/elements/description', $vars);
+	$menu = elgg_view('framework/bootstrap/object/elements/menu', $vars);
 
 
 	echo elgg_view_image_block($author, $friendly_time . $description, array(

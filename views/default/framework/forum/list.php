@@ -1,20 +1,15 @@
 <?php
 
-$container = elgg_extract('entity', $vars);
+$list_id = elgg_extract('list_id', $vars, "forumlist");
+$container_guids = elgg_extract('container_guids', $vars, ELGG_ENTITIES_ANY_VALUE);
 $subtypes = elgg_extract('subtypes', $vars, ELGG_ENTITIES_ANY_VALUE);
 
 $title = false;
 
-$dbprefix = elgg_get_config('dbprefix');
 $getter_options = array(
 	'types' => 'object',
 	'subtypes' => $subtypes,
-	'container_guid' => $container->guid,
-	'wheres' => array("NOT EXISTS (
- 			SELECT 1 FROM {$dbprefix}entity_relationships
- 				WHERE guid_one = e.guid
- 				AND relationship = 'filed_in'
- 		)")
+	'container_guids' => $container_guids,
 );
 
 $list_options = array(
@@ -28,11 +23,11 @@ $list_options = array(
 					'sortable' => true,
 					'sort_key' => 'oe.title',
 				),
-				'topics' => array(
+				'topics' => ($container_subtype !== 'hjforum' || HYPEFORUM_SUBFORUMS) ? array(
 					'text' => elgg_echo('hj:forum:tablecol:topics'),
 					'sortable' => true,
 					'sort_key' => 'forum.topics'
-				),
+				) : NULL,
 				'posts' => array(
 					'text' => elgg_echo('hj:forum:tablecol:posts'),
 					'sortable' => true,
@@ -57,11 +52,11 @@ $viewer_options = array(
 	'full_view' => true
 );
 
-if (!get_input('__ord_fdefault', false)) {
-	set_input('__ord_fdefault', 'e.last_action');
-	set_input('__dir_fdefault', 'DESC');
+if (!get_input("__ord_$list_id", false)) {
+	set_input("__ord_$list_id", 'e.last_action');
+	set_input("__dir_$list_id", 'DESC');
 }
 
-$content .= hj_framework_view_list("fdefault", $getter_options, $list_options, $viewer_options, 'elgg_get_entities');
+$content .= hj_framework_view_list($list_id, $getter_options, $list_options, $viewer_options, 'elgg_get_entities');
 
 echo elgg_view_module('forum-category', $title, $content);

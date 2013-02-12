@@ -3,12 +3,18 @@
 $result = hj_framework_edit_object_action();
 
 if ($result) {
-	print json_encode(array('guid' => $result['entity']->guid));
-	if (!$result['entity']->hasCategories('hjforumcategory')) {
-		forward("forum/create/category/{$result['entity']->guid}");
+	$entity = elgg_extract('entity', $result);
+	
+	print json_encode(array('guid' => $entity->guid));
+
+	// Check to see if the forum subcategories are enabled
+	// If no categories are enabled forward to a category creation form
+	if (HYPEFORUM_CATEGORIES && $entity->enable_subcategories && !$entity->hasCategories('hjforumcategory')) {
+		forward("forum/create/category/{$entity->guid}");
 	} else {
 		forward($result['forward']);
 	}
+
 } else {
 	forward(REFERER);
 }

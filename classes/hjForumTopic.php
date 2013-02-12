@@ -7,4 +7,14 @@ class hjForumTopic extends hjForum {
 		$this->attributes['subtype'] = "hjforumtopic";
 	}
 
+	public function save() {
+		$return = parent::save();
+
+		if ($return) {
+			$this->setAncestry();
+		}
+
+		return $return;
+	}
+
 }

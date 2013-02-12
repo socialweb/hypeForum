@@ -6,13 +6,13 @@ $title = elgg_echo('hj:forum:dashboard:site');
 
 elgg_push_breadcrumb($title);
 
-$filter = elgg_view('hj/forum/dashboard/filter', array(
+$filter = elgg_view('framework/forum/dashboard/filter', array(
 	'filter_context' => 'site'
 ));
 
-$content = elgg_view('hj/forum/dashboard/site');
+$content = elgg_view('framework/forum/dashboard/site');
 
-$sidebar = elgg_view('hj/forum/dashboard/sidebar', array(
+$sidebar = elgg_view('framework/forum/dashboard/sidebar', array(
 	'dashboard' => 'site'
 ));
 

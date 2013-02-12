@@ -4,4 +4,7 @@ if (elgg_in_context('activity') || elgg_in_context('widgets') || elgg_in_context
 	return true;
 }
 
-echo elgg_view('framework/bootstrap/entity/menu', $vars);
+$vars['dropdown'] = false;
+$vars['class'] = '';
+
+echo elgg_view('framework/bootstrap/object/elements/menu', $vars);
