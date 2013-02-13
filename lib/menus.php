@@ -76,7 +76,7 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 		case 'hjforumtopic' :
 
-			if (HYPEFORUM_SUBSCRIPTIONS) {
+			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
 					$items['subscription'] = array(
 						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
 						'href' => $entity->getSubscriptionURL(),
@@ -231,7 +231,7 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 
 		case 'hjforumtopic' :
 
-			if (HYPEFORUM_SUBSCRIPTIONS) {
+			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
 					$items['subscription'] = array(
 						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
 						'href' => $entity->getSubscriptionURL(),

@@ -1,5 +1,5 @@
 <?php
-$user = $vars['user'];
+$user = $vars['entity'];
 
 if (!$user) return true;
 

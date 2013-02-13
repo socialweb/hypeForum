@@ -6,10 +6,10 @@ $english = array(
 	'forums' => 'Forums',
 	'hj:forum:siteforums' => 'Site-wide Forums',
 	
-	'item:object:hjforum' => 'forum',
-	'item:object:hjforumtopic' => 'forum topic',
-	'item:object:hjforumpost' => 'forum post',
-	'item:object:hjforumcategory' => 'forum category',
+	'item:object:hjforum' => 'Forums',
+	'item:object:hjforumtopic' => 'Forum Topics',
+	'item:object:hjforumpost' => 'Forum Posts',
+	'item:object:hjforumcategory' => 'Forum Category',
 	
 	'items:object:hjforum' => 'forums',
 	'items:object:hjforumtopic' => 'forum topics',
@@ -85,6 +85,8 @@ $english = array(
 	'edit:plugin:hypeforum:params[forum_subscriptions]' => 'Enable notification subscriptions',
 	'edit:plugin:hypeforum:params[forum_bookmarks]' => 'Enable bookmarks',
 	'edit:plugin:hypeforum:params[forum_group_forums]' => 'Enable Group forums',
+
+	'edit:plugin:hypeforum:params[forum_user_signature]' => 'Enable user signatures in forum posts',
 	
 	'hj:forum:filter' => 'Filter Forums',
 
@@ -99,6 +101,19 @@ $english = array(
 
 	'edit:object:hjforum:sticky' => 'Sticky Topic',
 	'hj:forum:sticky' => 'Sticky Topic',
+
+	'hj:forum:new:hjforum' => 'A new sub-forum',
+	'hj:forum:new:hjforumtopic' => 'A new forum topic',
+	'hj:forum:new:hjforumpost' => 'A new forum post',
+
+	'hj:forum:user:settings' => 'Forum Settings',
+
+	'edit:plugin:user:hypeforum:params[hypeforum_digest]' => 'Notify me about new activity in forums I am subscribted to:',
+	'hj:forum:digest:fiveminute' => 'instantly',
+	'hj:forum:digest:daily' => 'in a daily digest',
+	'hj:forum:digest:weekly' => 'in a weekly digest',
+
+	'edit:plugin:user:hypeforum:params[hypeforum_signature]' => 'Add signature to my forum posts:',
 
 	
 	

@@ -8,13 +8,7 @@ class hjForumTopic extends hjForum {
 	}
 
 	public function save() {
-		$return = parent::save();
-
-		if ($return) {
-			$this->setAncestry();
-		}
-
-		return $return;
+		return parent::save();
 	}
 
 }

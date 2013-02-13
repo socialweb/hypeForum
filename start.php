@@ -25,6 +25,7 @@ define('HYPEFORUM_POST_RIVER', elgg_get_plugin_setting('forum_post_river', 'hype
 define('HYPEFORUM_BOOKMARKS', elgg_get_plugin_setting('forum_bookmarks', 'hypeForum'));
 define('HYPEFORUM_SUBSCRIPTIONS', elgg_get_plugin_setting('forum_subscriptions', 'hypeForum'));
 define('HYPEFORUM_GROUP_FORUMS', elgg_get_plugin_setting('forum_group_forums', 'hypeForum'));
+define('HYPEFORUM_USER_SIGNATURE', elgg_get_plugin_setting('forum_user_signature', 'hypeForum'));
 
 elgg_register_event_handler('init', 'system', 'hj_forum_init');
 
@@ -56,8 +57,7 @@ function hj_forum_init() {
 		'assets',
 		'views',
 		'menus',
-		'hooks',
-		'callbacks'
+		'hooks'
 	);
 
 	foreach ($libraries as $lib) {
@@ -78,4 +78,10 @@ function hj_forum_init() {
 		add_group_tool_option('forums', elgg_echo('hj:forum:groupoption:enableforum'), true);
 		elgg_extend_view('groups/tool_latest', 'framework/forum/group_module');
 	}
+
+	// Notification
+//	register_notification_object('object', 'hjforumtopic', elgg_echo('hj:forum:newforumtopic'));
+//	register_notification_object('object', 'hjforumpost', elgg_echo('hj:forum:newforumpost'));
+//	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'hj_forum_notify_message');
+	
 }

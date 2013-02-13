@@ -1,6 +1,7 @@
 <?php
 
 elgg_register_plugin_hook_handler('init', 'form:edit:plugin:hypeforum', 'hj_forum_init_plugin_settings_form');
+elgg_register_plugin_hook_handler('init', 'form:edit:plugin:user:hypeforum', 'hj_forum_init_plugin_user_settings_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforum', 'hj_forum_init_forum_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforumtopic', 'hj_forum_init_forumtopic_form');
 elgg_register_plugin_hook_handler('init', 'form:edit:object:hjforumpost', 'hj_forum_init_forumpost_form');
@@ -23,7 +24,8 @@ function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
 		'forum_post_river',
 		//'forum_subscriptions',
 		'forum_bookmarks',
-		'forum_group_forums'
+		'forum_group_forums',
+		'forum_user_signature'
 	);
 
 	foreach ($settings as $s) {
@@ -44,7 +46,35 @@ function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
 	);
 
 	$config['buttons'] = false;
-	
+
+	return $config;
+}
+
+function hj_forum_init_plugin_user_settings_form($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+	$user = elgg_get_page_owner_entity();
+
+	$config['fields'] = array(
+//		'params[hypeforum_digest]' => array(
+//			'input_type' => 'dropdown',
+//			'options_values' => array(
+//				'fiveminute' => elgg_echo('hj:forum:digest:fiveminute'),
+//				'daily' => elgg_echo('hj:forum:digest:daily'),
+//				'weekly' => elgg_echo('hj:forum:digest:weekly')
+//			),
+//			'value' => $entity->getUserSetting('hypeforum_digest', $user->guid)
+//		),
+		'params[hypeforum_signature]' => (HYPEFORUM_USER_SIGNATURE) ? array(
+			'input_type' => 'longtext',
+			'class' => 'elgg-input-longtext',
+			'value' => $entity->getUserSetting('hypeforum_signature', $user->guid)
+				) : null,
+		
+	);
+
+	$config['buttons'] = false;
+
 	return $config;
 }
 
@@ -332,7 +362,7 @@ function hj_forum_get_forum_icons($entity = null, $container = null) {
 			'src' => elgg_get_site_url() . 'mod/hypeForum/graphics/forumtopic/' . $option . '.png',
 			'width' => 16,
 			'height' => 16
-		));
+				));
 		$options_values["$label"] = $option;
 	}
 

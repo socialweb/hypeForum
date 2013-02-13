@@ -21,14 +21,14 @@ if (HYPEFORUM_STICKY && $entity->isSticky()) {
 }
 
 if ($full) {
-	$author = elgg_view('object/hjforumpost/elements/author', array('user' => $user));
-
+	$author = elgg_view('object/hjforumpost/elements/author', array('entity' => $user));
+	$author_signature = elgg_view('object/hjforumpost/elements/signature', array('entity' => $user));
 
 	$description = elgg_view('framework/bootstrap/object/elements/description', $vars);
 	$menu = elgg_view('framework/bootstrap/object/elements/menu', $vars);
 
 
-	echo elgg_view_image_block($author, $icon . $friendly_time . $description, array(
+	echo elgg_view_image_block($author, $icon . $friendly_time . $description . $author_signature, array(
 		'image_alt' => $menu
 	));
 } else {

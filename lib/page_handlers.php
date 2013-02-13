@@ -117,7 +117,7 @@ function hj_forum_page_handler($page, $handler) {
 				$sidebar = elgg_view('framework/forum/dashboard/sidebar');
 			}
 
-			echo elgg_view_page($entity->title, elgg_view_layout('entity', array('entity' => $entity, 'sidebar' => $sidebar)));
+			echo elgg_view_page($entity->title, elgg_view_layout('framework/entity', array('entity' => $entity, 'sidebar' => $sidebar)));
 			break;
 	}
 

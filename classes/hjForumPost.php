@@ -12,7 +12,6 @@ class hjForumPost extends hjForumTopic {
 
 		if ($return) {
 			$this->getContainerEntity()->createSubscription();
-			$this->setAncestry();
 		}
 
 		return $return;
@@ -21,4 +20,5 @@ class hjForumPost extends hjForumTopic {
 	public function getURL() {
 		return elgg_http_add_url_query_elements($this->getContainerEntity()->getURL(), array('__goto' => $this->guid)) . "#elgg-entity-$this->guid";
 	}
+
 }

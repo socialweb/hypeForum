@@ -12,6 +12,7 @@ class hjForum extends hjObject {
 
 		if ($return) {
 			$this->setAncestry();
+			$this->notifySubscribedUsers();
 		}
 
 		return $return;
@@ -79,6 +80,10 @@ class hjForum extends hjObject {
 		$categories = elgg_get_entities($options);
 
 		return ($categories);
+	}
+
+	public function notifySubscribedUsers() {
+		return hj_forum_notify_subscribed_users($this->guid);
 	}
 
 }
