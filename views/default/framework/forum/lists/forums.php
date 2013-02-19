@@ -2,15 +2,22 @@
 
 $list_id = elgg_extract('list_id', $vars, "forumlist");
 $container_guids = elgg_extract('container_guids', $vars, ELGG_ENTITIES_ANY_VALUE);
-$subtypes = elgg_extract('subtypes', $vars, ELGG_ENTITIES_ANY_VALUE);
+$subtypes = elgg_extract('subtypes', $vars, array('hjforum', 'hjforumtopic'));
 
 $title = false;
+
+$subtype_ids = implode(',', array(
+	get_subtype_id('object', 'hjforum'),
+	get_subtype_id('object', 'hjforumtopic')
+		));
 
 $getter_options = array(
 	'types' => 'object',
 	'subtypes' => $subtypes,
 	'container_guids' => $container_guids,
 );
+
+$getter_options = hj_framework_get_order_by_clause('forum.sticky', 'DESC', $getter_options);
 
 $list_options = array(
 	'list_type' => 'table',

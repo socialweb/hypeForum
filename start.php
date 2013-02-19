@@ -10,7 +10,7 @@
  * @copyright Copyrigh (c) 2011-2013, Ismayil Khayredinov
  */
 
-define('HYPEFORUM_RELEASE', 1360277917);
+define('HYPEFORUM_RELEASE', 1360948621);
 
 define('HYPEFORUM_CATEGORIES', elgg_get_plugin_setting('categories', 'hypeForum'));
 define('HYPEFORUM_CATEGORIES_TOP', elgg_get_plugin_setting('categories_top', 'hypeForum'));

@@ -11,7 +11,7 @@ if (HYPEFORUM_FORUM_COVER) {
 
 echo elgg_view('framework/bootstrap/object/elements/description', $vars);
 
-IF (HYPEFORUM_CATEGORIES && $entity->enable_subcategories) {
+if (HYPEFORUM_CATEGORIES && $entity->enable_subcategories) {
 	$options = array(
 		'types' => 'object',
 		'subtypes' => 'hjforumcategory',
@@ -39,5 +39,5 @@ IF (HYPEFORUM_CATEGORIES && $entity->enable_subcategories) {
 		'container_guids' => array($entity->guid),
 		'subtypes' => array('hjforum', 'hjforumtopic')
 	);
-	echo elgg_view('framework/forum/list', $params);
+	echo elgg_view('framework/forum/lists/forums', $params);
 }

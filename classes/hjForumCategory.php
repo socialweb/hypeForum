@@ -7,6 +7,14 @@ class hjForumCategory extends hjCategory {
 		$this->attributes['subtype'] = "hjforumcategory";
 	}
 
+	public function save() {
+		if ($guid = parent::save()) {
+			if (!isset($this->priority))
+				$this->priority = 0;
+		}
+		return $guid;
+	}
+	
 	public function getURL() {
 		return $this->getContainerEntity()->getURL();
 	}

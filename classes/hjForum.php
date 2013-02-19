@@ -8,16 +8,20 @@ class hjForum extends hjObject {
 	}
 
 	public function save() {
-		$return = parent::save();
+		if (!$this->guid) {
+			$return = parent::save();
 
-		if ($return) {
-			$this->setAncestry();
-			$this->notifySubscribedUsers();
+			if ($return) {
+				$this->setAncestry();
+				$this->notifySubscribedUsers();
+			}
+
+			return $return;
 		}
 
-		return $return;
+		return parent::save();
 	}
-	
+
 	public function countTopics($recursive = false) {
 		return $this->getLatestTopics(0, true, $recursive);
 	}

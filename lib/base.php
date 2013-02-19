@@ -64,28 +64,24 @@ function hj_forum_get_latest_posts($container_guid, $limit = 10, $count = false,
 function hj_forum_notify_subscribed_users($guid) {
 
 	$entity = get_entity($guid);
-	$ancestry = hj_framework_get_ancestry($guid);
 
-	if (!$ancestry) return;
+	$subscribers = $entity->getSubscribedUsers();
 
-	$subscribers = array();
-
-	foreach ($ancestry as $ancestor) {
-		if ($ancestor instanceof hjObject) {
-			$users = $ancestor->getSubscribedUsers();
-			if ($users) {
-				foreach ($users as $u) {
-					if ($u->guid != $entity->guid) {
-						$subscribers[] = $u->guid;
-					}
-				}
-			}
-		}
-	}
+//	foreach ($ancestry as $ancestor) {
+//		if ($ancestor instanceof hjObject) {
+//			$users = $ancestor->getSubscribedUsers();
+//			if ($users) {
+//				foreach ($users as $u) {
+//					if ($u->guid != $entity->guid) {
+//						$subscribers[] = $u->guid;
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	$subtype = $entity->getSubtype();
 	
-	$subscribers = array_unique($subscribers);
 	$from = elgg_get_site_entity()->guid;
 
 	$subject = elgg_echo("hj:forum:new:$subtype");

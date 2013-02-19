@@ -6,6 +6,8 @@ run_function_once('hj_forum_1358206168');
 run_function_once('hj_forum_1358285155');
 run_function_once('hj_forum_1359738428');
 run_function_once('hj_forum_1360277917');
+run_function_once('hj_forum_1360948016');
+run_function_once('hj_forum_1360948621');
 
 function hj_forum_1358206168() {
 
@@ -39,7 +41,8 @@ function hj_forum_1358206168() {
 		'metadata_name_value_pairs' => array(
 			'name' => 'handler',
 			'value' => 'hjforumtopic'
-		)
+		),
+		'limit' => 0
 			));
 
 	/**
@@ -58,7 +61,7 @@ function hj_forum_1358206168() {
 		$widgets = elgg_get_entities(array(
 			'types' => 'object',
 			'subtypes' => 'widget',
-			'container_guids' => $segment->guid,
+			'container_guids' => array($segment->guid, $forum->guid),
 			'limit' => 0
 				));
 
@@ -83,13 +86,12 @@ function hj_forum_1358206168() {
 			$cat->save();
 
 			foreach ($threads as $thread) {
-				$thread->container_guid = $forum->guid; // make sure the thread is right under forum entity
+				$query = "UPDATE {$dbprefix}entities SET container_guid = $forum->guid WHERE guid = $thread->guid";
+				update_data($query);
 				unset($thread->widget);
-				$thread->save();
 
-				add_entity_relationship($thread->guid, 'filed_in', $cat->guid);
-				add_entity_relationship($forum->guid, 'forum', $thread->guid);
-
+				$thread->setCategory();
+				$thread->setAncestry();
 
 				$dbprefix = elgg_get_config('dbprefix');
 
@@ -97,7 +99,7 @@ function hj_forum_1358206168() {
 					JOIN {$dbprefix}metadata md ON md.entity_guid = e.guid
 					JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
 					JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
-					WHERE subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost' AND e.container_guid = $thread->guid ";
+					WHERE e.subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost' AND e.container_guid = $thread->guid ";
 
 				$guids = get_data($query);
 
@@ -108,10 +110,10 @@ function hj_forum_1358206168() {
 				}
 			}
 
-			$widget->delete();
+			$widget->disable('plugin_version_upgrade');
 		}
 
-		$segment->delete();
+		$segment->disable('plugin_version_upgrade');
 	}
 
 	elgg_set_ignore_access($ia);
@@ -147,7 +149,7 @@ function hj_forum_1358285155() {
 				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
 				JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
 				SET e.subtype = $subtypeIdForumPost
-				WHERE subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost'	";
+				WHERE e.subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost'	";
 
 	update_data($query);
 
@@ -168,7 +170,7 @@ function hj_forum_1359738428() {
 	$query = "SELECT guid
 				FROM {$dbprefix}entities e
 				WHERE e.subtype IN ($subtypes_in)";
-				
+
 	$data = get_data($query);
 
 	foreach ($data as $e) {
@@ -190,9 +192,60 @@ function hj_forum_1360277917() {
 
 	update_data($query);
 
+	$query = "	 {$dbprefix}metastrings msv
+				JOIN {$dbprefix}metadata md ON md.value_id = msv.id
+				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
+				SET msv.string = 0
+				WHERE msn.string = 'sticky' AND msv.string = 'false'	";
+
+	update_data($query);
+}
+
+function hj_forum_1360948016() {
+
+	$dbprefix = elgg_get_config('dbprefix');
+	/**
+	 * Upgrade :
+	 * 1. Convert misclassified forum topics with posts as children back into topics
+	 */
+	$subtypeIdForum = get_subtype_id('object', 'hjforum');
+	$subtypeIdForumTopic = get_subtype_id('object', 'hjforumtopic');
+
+	$query = "	UPDATE {$dbprefix}entities e
+				JOIN {$dbprefix}metadata md ON md.entity_guid = e.guid
+				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
+				JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
+				SET e.subtype = $subtypeIdForumTopic
+				WHERE e.subtype = $subtypeIdForum AND msn.string = 'children' AND msv.string = 'forumpost'	";
+
+	update_data($query);
+
+}
+
+function hj_forum_1360948621() {
+
+	$dbprefix = elgg_get_config('dbprefix');
+	/**
+	 * Upgrade :
+	 * 1. Former hjAnnotation's description is stored in annotation_value metadata. Needs updating
+	 */
+	$subtypeIdForumPost = get_subtype_id('object', 'hjforumpost');
+
+	$query = "	UPDATE {$dbprefix}objects_entity oe
+				JOIN {$dbprefix}metadata md ON md.entity_guid = oe.guid
+				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
+				JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
+				JOIN {$dbprefix}entities e On oe.guid = e.guid
+				SET oe.description = msv.string
+				WHERE e.subtype = $subtypeIdForumPost AND msn.string = 'annotation_value'";
+
+	update_data($query);
+
 	elgg_delete_metadata(array(
-		'metadata_names' => 'sticky',
-		'metadata_values' => 'false',
-		'limit' => 0
+		'types' => 'object',
+		'subtypes' => 'hjforumpost',
+		'metadata_names' => array('annotation_name', 'annotation_value')
 	));
+
+
 }

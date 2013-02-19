@@ -24,5 +24,5 @@ if (HYPEFORUM_CATEGORIES_TOP) { // global forum categories are enabled
 		'container_guids' => array($group->guid),
 		'subtypes' => array('hjforum')
 	);
-	echo elgg_view('framework/forum/list', $params);
+	echo elgg_view('framework/forum/lists/forums', $params);
 }

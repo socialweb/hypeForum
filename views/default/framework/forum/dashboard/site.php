@@ -7,7 +7,7 @@ if (HYPEFORUM_CATEGORIES_TOP) { // global forum categories are enabled
 		'types' => 'object',
 		'subtypes' => 'hjforumcategory',
 		'limit' => 0,
-		'container_guid' => $site->guid
+		'container_guids' => $site->guid
 	);
 
 	// order by priority
@@ -24,5 +24,5 @@ if (HYPEFORUM_CATEGORIES_TOP) { // global forum categories are enabled
 		'container_guids' => array($site->guid),
 		'subtypes' => array('hjforum')
 	);
-	echo elgg_view('framework/forum/list', $params);
+	echo elgg_view('framework/forum/lists/forums', $params);
 }

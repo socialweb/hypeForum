@@ -145,8 +145,7 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 						'parent_name' => 'options',
 						'class' => 'elgg-button-edit-entity',
 						'data-toggle' => 'dialog',
-						/** @todo: Add custom callback */
-						//'data-callback' => 'refresh:lists::framework',
+						'data-callback' => 'editedcategory::framework:forum',
 						'data-uid' => $entity->guid,
 						'priority' => 850
 					),

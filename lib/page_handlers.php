@@ -33,14 +33,17 @@ function hj_forum_page_handler($page, $handler) {
 					break;
 
 				case 'groups' :
+					gatekeeper();
 					include "{$pages}dashboard/groups.php";
 					break;
 
 				case 'bookmarks' :
+					gatekeeper();
 					include "{$pages}dashboard/bookmarks.php";
 					break;
 
 				case 'subscriptions' :
+					gatekeeper();
 					include "{$pages}dashboard/subscriptions.php";
 					break;
 			}
@@ -64,6 +67,8 @@ function hj_forum_page_handler($page, $handler) {
 			break;
 
 		case 'create' :
+
+			gatekeeper();
 
 			list($action, $subtype, $container_guid) = $page;
 
@@ -90,6 +95,8 @@ function hj_forum_page_handler($page, $handler) {
 			break;
 
 		case 'edit' :
+
+			gatekeeper();
 
 			list($action, $guid) = $page;
 

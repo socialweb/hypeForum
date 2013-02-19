@@ -8,7 +8,12 @@ class hjForumTopic extends hjForum {
 	}
 
 	public function save() {
-		return parent::save();
+		if ($guid = parent::save()) {
+			if (!isset($this->sticky)) {
+				$this->sticky = 0;
+			}
+		}
+		return $guid;
 	}
 
 }

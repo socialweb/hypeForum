@@ -22,33 +22,21 @@ $menu = elgg_view_menu('hjentityhead', $params);
 
 $title = elgg_view_image_block($handle, $title, array(
 	'image_alt' => $menu
-));
+		));
 
 $content = elgg_view('framework/bootstrap/object/elements/description', $vars);
 
 $list_id = "fc$category->guid";
 
-$subtype_ids = implode(',', array(
-	get_subtype_id('object', 'hjforum'),
-	get_subtype_id('object', 'hjforumtopic')
-		));
-
-$dbprefix = elgg_get_config('dbprefix');
 $getter_options = array(
-	'selects' => array("CAST(stickymsv.string AS SIGNED) AS stickyval"),
-	'joins' => array(
-		"JOIN {$dbprefix}metadata stickymd ON e.guid = stickymd.entity_guid",
-		"JOIN {$dbprefix}metastrings stickymsn ON (stickymsn.string = 'sticky')",
-		"LEFT JOIN {$dbprefix}metastrings stickymsv ON (stickymd.name_id = stickymsn.id AND stickymd.value_id = stickymsv.id)"
-	),
 	'types' => 'object',
 	'subtypes' => array('hjforum', 'hjforumtopic'),
 	'relationship' => 'filed_in',
 	'relationship_guid' => $category->guid,
 	'inverse_relationship' => true,
-	'group_by' => 'e.guid',
-	'order_by' => "FIELD(e.subtype, $subtype_ids), ISNULL(stickyval), stickyval DESC"
 );
+
+$getter_options = hj_framework_get_order_by_clause('forum.sticky', 'DESC', $getter_options);
 
 $list_options = array(
 	'list_type' => 'table',

@@ -22,7 +22,7 @@ function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
 		'forum_forum_river',
 		'forum_topic_river',
 		'forum_post_river',
-		//'forum_subscriptions',
+		'forum_subscriptions',
 		'forum_bookmarks',
 		'forum_group_forums',
 		'forum_user_signature'

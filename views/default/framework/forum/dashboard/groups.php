@@ -22,4 +22,4 @@ $params = array(
 	'container_guids' => $container_guids,
 	'subtypes' => array('hjforum', 'hjforumtopic')
 );
-echo elgg_view('framework/forum/list', $params);
+echo elgg_view('framework/forum/lists/forums', $params);

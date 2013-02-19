@@ -50,6 +50,19 @@ function hj_forum_order_by_clauses($hook, $type, $options, $params) {
 			$options['joins'][] = "JOIN {$dbprefix}users_entity ue ON ue.guid = e.owner_guid";
 			$options['order_by'] = "ue.name $direction";
 			break;
+
+		case 'sticky' :
+			$subtype_ids = implode(',', array(
+				get_subtype_id('object', 'hjforum'),
+				get_subtype_id('object', 'hjforumtopic')
+					));
+			$options['selects'][] = "SUM(stickymsv.string) stickyval";
+			$options['joins'][] = "JOIN {$dbprefix}metadata stickymd ON e.guid = stickymd.entity_guid";
+			$options['joins'][] = "JOIN {$dbprefix}metastrings stickymsn ON (stickymsn.string = 'sticky')";
+			$options['joins'][] = "LEFT JOIN {$dbprefix}metastrings stickymsv ON (stickymd.name_id = stickymsn.id AND stickymd.value_id = stickymsv.id)";
+			$options['group_by'] = 'e.guid';
+			$options['order_by'] = "FIELD(e.subtype, $subtype_ids), ISNULL(SUM(stickymsv.string)), SUM(stickymsv.string) = 0, SUM(stickymsv.string) $direction, e.time_created DESC";
+			break;
 	}
 
 	if ($order_by_prev) {
@@ -74,12 +87,12 @@ function hj_forum_filter_forum_list($hook, $type, $options, $params) {
 			return $options;
 		}
 	}
-	
+
 	if (!in_array('hjforum', $options['subtypes'])
 			&& !in_array('hjforumtopic', $options['subtypes'])) {
 		return $options;
 	}
-	
+
 	$query = get_input("__q", false);
 
 	if (!$query || empty($query)) {
