@@ -1,6 +1,10 @@
 <?php
 
 // hypeForum upgrade scripts
+$ia = elgg_set_ignore_access(true);
+
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', '500');
 
 run_function_once('hj_forum_1358206168');
 run_function_once('hj_forum_1358285155');
@@ -8,17 +12,18 @@ run_function_once('hj_forum_1359738428');
 run_function_once('hj_forum_1360277917');
 run_function_once('hj_forum_1360948016');
 run_function_once('hj_forum_1360948621');
+run_function_once('hj_forum_1361379905');
+
+elgg_set_ignore_access($ia);
 
 function hj_forum_1358206168() {
 
-	ini_set('memory_limit', '512M');
-	ini_set('max_execution_time', '500');
-
-	$ia = elgg_set_ignore_access(true);
 
 	$subtypes = array(
 		'hjforum' => 'hjForum',
+		'hjforumcategory' => 'hjForumCategory',
 		'hjforumtopic' => 'hjForumTopic',
+		'hjforumpost' => 'hjForumPost'
 	);
 
 	foreach ($subtypes as $subtype => $class) {
@@ -54,7 +59,6 @@ function hj_forum_1358206168() {
 	foreach ($segments as $segment) {
 
 		$forum = get_entity($segment->container_guid);
-
 		$query = "UPDATE {$dbprefix}entities SET subtype = $subtypeIdForum WHERE subtype = $subtypeIdForumTopic AND guid = $forum->guid";
 		update_data($query);
 
@@ -65,75 +69,45 @@ function hj_forum_1358206168() {
 			'limit' => 0
 				));
 
-		foreach ($widgets as $widget) {
+		if ($widgets) {
+			$forum->enable_subcategories = true;
+			foreach ($widgets as $widget) {
 
-			$threads = elgg_get_entities_from_metadata(array(
-				'types' => 'object',
-				'subtypes' => 'hjforumtopic',
-				'metadata_name_value_pairs' => array(
-					array('name' => 'widget', 'value' => $widget->guid)
-				),
-				'limit' => 0,
-					));
+				$threads = elgg_get_entities_from_metadata(array(
+					'types' => 'object',
+					'subtypes' => 'hjforumtopic',
+					'metadata_name_value_pairs' => array(
+						array('name' => 'widget', 'value' => $widget->guid)
+					),
+					'limit' => 0,
+						));
 
-			$cat = new ElggObject();
-			$cat->subtype = 'hjforumcategory';
-			$cat->owner_guid = elgg_get_logged_in_user_guid();
-			$cat->container_guid = $forum->guid;
-			$cat->title = $widget->title;
-			$cat->description = '';
-			$cat->access_id = ACCESS_PUBLIC;
-			$cat->save();
+				$cat = new ElggObject();
+				$cat->subtype = 'hjforumcategory';
+				$cat->owner_guid = elgg_get_logged_in_user_guid();
+				$cat->container_guid = $forum->guid;
+				$cat->title = $widget->title;
+				$cat->description = '';
+				$cat->access_id = ACCESS_PUBLIC;
+				$cat->save();
 
-			foreach ($threads as $thread) {
-				$query = "UPDATE {$dbprefix}entities SET container_guid = $forum->guid WHERE guid = $thread->guid";
-				update_data($query);
-				unset($thread->widget);
+				foreach ($threads as $thread) {
+					$query = "UPDATE {$dbprefix}entities SET container_guid = $forum->guid WHERE guid = $thread->guid";
+					update_data($query);
+					unset($thread->widget);
 
-				$thread->setCategory();
-				$thread->setAncestry();
-
-				$dbprefix = elgg_get_config('dbprefix');
-
-				$query = "	SELECT guid FROM {$dbprefix}entities e
-					JOIN {$dbprefix}metadata md ON md.entity_guid = e.guid
-					JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
-					JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
-					WHERE e.subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost' AND e.container_guid = $thread->guid ";
-
-				$guids = get_data($query);
-
-				if (count($guids)) {
-					foreach ($guids as $post) {
-						add_entity_relationship($forum->guid, 'forum', $post->guid);
-					}
+					$thread->setCategory($cat->guid, true);
 				}
+
+				$widget->disable('plugin_version_upgrade');
 			}
-
-			$widget->disable('plugin_version_upgrade');
 		}
-
+		
 		$segment->disable('plugin_version_upgrade');
 	}
-
-	elgg_set_ignore_access($ia);
 }
 
 function hj_forum_1358285155() {
-
-	$ia = elgg_set_ignore_access(true);
-
-	$subtypes = array(
-		'hjforumpost' => 'hjForumPost'
-	);
-
-	foreach ($subtypes as $subtype => $class) {
-		if (get_subtype_id('object', $subtype)) {
-			update_subtype('object', $subtype, $class);
-		} else {
-			add_subtype('object', $subtype, $class);
-		}
-	}
 
 	$subtypeIdForumPost = get_subtype_id('object', 'hjforumpost');
 	$subtypeIdAnnotation = get_subtype_id('object', 'hjannotation');
@@ -152,13 +126,9 @@ function hj_forum_1358285155() {
 				WHERE e.subtype = $subtypeIdAnnotation AND msn.string = 'handler' AND msv.string = 'hjforumpost'	";
 
 	update_data($query);
-
-	elgg_set_ignore_access($ia);
 }
 
 function hj_forum_1359738428() {
-
-	$ia = elgg_set_ignore_access(true);
 
 	$subtypes[] = get_subtype_id('object', 'hjforum');
 	$subtypes[] = get_subtype_id('object', 'hjforumtopic');
@@ -176,8 +146,6 @@ function hj_forum_1359738428() {
 	foreach ($data as $e) {
 		hj_framework_set_ancestry($e->guid);
 	}
-
-	elgg_set_ignore_access($ia);
 }
 
 function hj_forum_1360277917() {
@@ -192,7 +160,7 @@ function hj_forum_1360277917() {
 
 	update_data($query);
 
-	$query = "	 {$dbprefix}metastrings msv
+	$query = "	UPDATE {$dbprefix}metastrings msv
 				JOIN {$dbprefix}metadata md ON md.value_id = msv.id
 				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
 				SET msv.string = 0
@@ -219,7 +187,6 @@ function hj_forum_1360948016() {
 				WHERE e.subtype = $subtypeIdForum AND msn.string = 'children' AND msv.string = 'forumpost'	";
 
 	update_data($query);
-
 }
 
 function hj_forum_1360948621() {
@@ -235,7 +202,7 @@ function hj_forum_1360948621() {
 				JOIN {$dbprefix}metadata md ON md.entity_guid = oe.guid
 				JOIN {$dbprefix}metastrings msn ON msn.id = md.name_id
 				JOIN {$dbprefix}metastrings msv ON msv.id = md.value_id
-				JOIN {$dbprefix}entities e On oe.guid = e.guid
+				JOIN {$dbprefix}entities e on oe.guid = e.guid
 				SET oe.description = msv.string
 				WHERE e.subtype = $subtypeIdForumPost AND msn.string = 'annotation_value'";
 
@@ -246,6 +213,21 @@ function hj_forum_1360948621() {
 		'subtypes' => 'hjforumpost',
 		'metadata_names' => array('annotation_name', 'annotation_value')
 	));
+}
 
+function hj_forum_1361379905() {
 
+	// set priority metadata on forum categories
+	$subtype = get_subtype_id('object', 'hjforumcategory');
+
+	$dbprefix = elgg_get_config('dbprefix');
+	$query = "SELECT guid, owner_guid
+				FROM {$dbprefix}entities e
+				WHERE e.subtype IN ($subtype)";
+
+	$data = get_data($query);
+
+	foreach ($data as $e) {
+		create_metadata($e->guid, 'priority', 0, '', $e->owner_guid, ACCESS_PUBLIC);
+	}
 }

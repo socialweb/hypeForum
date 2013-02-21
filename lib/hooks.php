@@ -99,7 +99,7 @@ function hj_forum_filter_forum_list($hook, $type, $options, $params) {
 		return $options;
 	}
 
-	$query = sanitise_string($query);
+	$query = sanitise_string(urldecode($query));
 
 	$dbprefix = elgg_get_config('dbprefix');
 	$options['joins'][] = "JOIN {$dbprefix}objects_entity oe_q ON e.guid = oe_q.guid";

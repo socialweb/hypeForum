@@ -8,16 +8,13 @@ class hjForumCategory extends hjCategory {
 	}
 
 	public function save() {
-		if ($guid = parent::save()) {
-			if (!isset($this->priority))
-				$this->priority = 0;
-		}
-		return $guid;
+		return parent::save();
 	}
-	
+
 	public function getURL() {
 		return $this->getContainerEntity()->getURL();
 	}
+
 }
 
 ?>

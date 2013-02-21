@@ -22,6 +22,10 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 	switch ($entity->getSubtype()) {
 
+		default :
+			return $return;
+			break;
+
 		case 'hjforum' :
 
 			if (HYPEFORUM_SUBSCRIPTIONS) {
@@ -137,7 +141,7 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 		case 'hjforumcategory' :
 
-			if (!$full) {
+			if ($entity->canEdit()) {
 				$items = array(
 					'edit' => array(
 						'text' => elgg_echo('edit'),

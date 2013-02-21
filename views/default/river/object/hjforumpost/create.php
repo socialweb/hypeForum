@@ -1,5 +1,7 @@
 <?php
 
+elgg_push_context('activity');
+
 $item = elgg_extract('item', $vars);
 
 $subject = $item->getSubjectEntity();
@@ -23,3 +25,5 @@ echo elgg_view('river/item', array(
 	'summary' => $summary,
 	'message' => $message,
 ));
+
+elgg_pop_context();
