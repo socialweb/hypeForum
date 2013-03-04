@@ -15,7 +15,7 @@ $getter_options = array(
 $list_options = array(
 	'list_type' => 'list',
 	'list_class' => 'forum-category-list',
-	'list_pagination' => true
+	'pagination' => true
 );
 
 $viewer_options = array(

@@ -69,24 +69,49 @@ $english = array(
 	'hj:forum:dashboard:tabs:subscriptions' => 'Subscription',
 
 	'edit:plugin:hypeforum:params[categories_top]' => 'Enable categories for top-level Site and Group forums',
+	'edit:plugin:hypeforum:hint:categories_top' => 'Enabling this option will allow you to create multiple top-level categories, and forums will be grouped by category',
+
 	'edit:plugin:hypeforum:params[categories]' => 'Enable categories for nested forums and topics',
+	'edit:plugin:hypeforum:hint:categories' => 'Enabling this option will allow you to toggle categories within individual forums; sub-forums and topics will be grouped by category',
+
 	'edit:plugin:hypeforum:params[subforums]' => 'Enable sub-forums',
+	'edit:plugin:hypeforum:hint:subforums' => 'Enabling this option will allow you to create forums within forums; by default, items will be ordered as follows: sub-forums followed by sticky topics followed by regular topics by latest post)',
+
 	'edit:plugin:hypeforum:params[forum_cover]' => 'Enable cover images for forums',
+	'edit:plugin:hypeforum:hint:forum_cover' => 'If enabled, forum authors will be able to add cover images, which will be used both as icons and displayed as a cover image in full forum view',
+	
 	'edit:plugin:hypeforum:params[forum_sticky]' => 'Enable sticky topics',
+	'edit:plugin:hypeforum:hint:forum_sticky' => 'In default list ordering, sticky forms will be displayed first; they will also be marked with an icon',
+
 	'edit:plugin:hypeforum:params[forum_topic_cover]' => 'Enable cover images for topics',
+	'edit:plugin:hypeforum:hint:forum_topic_cover' => 'If enabled, topic authors will be allowed to add cover images to their topics',
+
 	'edit:plugin:hypeforum:params[forum_topic_icon]' => 'Enable topic icons',
+	'edit:plugin:hypeforum:hint:forum_topic_icon' => 'If enabled, topic authors will be able to choose an icon for their topic (see options below for a list of icons)',
+
 	'edit:plugin:hypeforum:params[forum_topic_icon_types]' => 'List of topic icon types',
 	'edit:plugin:hypeforum:topic_icon_hint' => 'Separated by comma. Icons need to be uploaded into mod/hypeForum/graphics/forumtopic/',
 
 	'edit:plugin:hypeforum:params[forum_forum_river]' => 'Add new forums to river',
+	'edit:plugin:hypeforum:hint:forum_forum_river' => 'Add information about new forums to the activity stream',
+
 	'edit:plugin:hypeforum:params[forum_topic_river]' => 'Add new topics to river',
+	'edit:plugin:hypeforum:hint:forum_forum_river' => 'Add information about new forum topics to the activity stream',
+
 	'edit:plugin:hypeforum:params[forum_post_river]' => 'Add new posts to river',
+	'edit:plugin:hypeforum:hint:forum_forum_river' => 'Add information about new forum posts to the activity stream',
 
 	'edit:plugin:hypeforum:params[forum_subscriptions]' => 'Enable notification subscriptions',
+	'edit:plugin:hypeforum:hint:forum_subscriptions' => 'Enabling this option will allow users to subscribe/unscribe from forum topic notifications',
+
 	'edit:plugin:hypeforum:params[forum_bookmarks]' => 'Enable bookmarks',
+	'edit:plugin:hypeforum:hint:forum_bookmarks' => 'Enabling this option will allow users to bookmark forum topics and display them in a separate tab on dashboard',
+
 	'edit:plugin:hypeforum:params[forum_group_forums]' => 'Enable Group forums',
+	'edit:plugin:hypeforum:hint:forum_group_forums' => 'Add forum functionality to groups',
 
 	'edit:plugin:hypeforum:params[forum_user_signature]' => 'Enable user signatures in forum posts',
+	'edit:plugin:hypeforum:hint:forum_user_signature' => 'Allows users to create an automatic signature and append it to all their posts; a forum to add a signature will be available in users\' tool settings',
 	
 	'hj:forum:filter' => 'Filter Forums',
 
@@ -107,11 +132,6 @@ $english = array(
 	'hj:forum:new:hjforumpost' => 'A new forum post',
 
 	'hj:forum:user:settings' => 'Forum Settings',
-
-	'edit:plugin:user:hypeforum:params[hypeforum_digest]' => 'Notify me about new activity in forums I am subscribted to:',
-	'hj:forum:digest:fiveminute' => 'instantly',
-	'hj:forum:digest:daily' => 'in a daily digest',
-	'hj:forum:digest:weekly' => 'in a weekly digest',
 
 	'edit:plugin:user:hypeforum:params[hypeforum_signature]' => 'Add signature to my forum posts:',
 

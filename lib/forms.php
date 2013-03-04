@@ -35,7 +35,8 @@ function hj_forum_init_plugin_settings_form($hook, $type, $return, $params) {
 				0 => elgg_echo('disable'),
 				1 => elgg_echo('enable')
 			),
-			'value' => $entity->$s
+			'value' => $entity->$s,
+			'hint' => elgg_echo("edit:plugin:hypeforum:hint:$s")
 		);
 	}
 

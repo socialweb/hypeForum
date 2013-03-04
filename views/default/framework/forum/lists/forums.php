@@ -52,7 +52,7 @@ $list_options = array(
 			)
 		)
 	),
-	'list_pagination' => true
+	'pagination' => true
 );
 
 $viewer_options = array(

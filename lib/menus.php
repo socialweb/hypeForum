@@ -9,6 +9,7 @@ elgg_register_menu_item('site', array(
 
 elgg_register_plugin_hook_handler('register', 'menu:hjentityhead', 'hj_forum_entity_menu');
 elgg_register_plugin_hook_handler('register', 'menu:title', 'hj_forum_entity_title_menu');
+elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'hj_forum_owner_block_menu');
 
 /**
  * Forum menus
@@ -29,13 +30,13 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 		case 'hjforum' :
 
 			if (HYPEFORUM_SUBSCRIPTIONS) {
-					$items['subscription'] = array(
-						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
-						'href' => $entity->getSubscriptionURL(),
-						'class' => 'elgg-button-subscription',
-						'parent_name' => 'options',
-						'priority' => 500
-					);
+				$items['subscription'] = array(
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'href' => $entity->getSubscriptionURL(),
+					'class' => 'elgg-button-subscription',
+					'parent_name' => 'options',
+					'priority' => 500
+				);
 			}
 
 			if ($entity->canWriteToContainer(0, 'object', 'hjforum') && HYPEFORUM_SUBFORUMS) {
@@ -81,23 +82,23 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 		case 'hjforumtopic' :
 
 			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
-					$items['subscription'] = array(
-						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
-						'href' => $entity->getSubscriptionURL(),
-						'class' => 'elgg-button-subscription',
-						'parent_name' => 'options',
-						'priority' => 500
-					);
+				$items['subscription'] = array(
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'href' => $entity->getSubscriptionURL(),
+					'class' => 'elgg-button-subscription',
+					'parent_name' => 'options',
+					'priority' => 500
+				);
 			}
 
 			if (HYPEFORUM_BOOKMARKS) {
-					$items['bookmark'] = array(
-						'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
-						'href' => $entity->getBookmarkURL(),
-						'class' => 'elgg-button-bookmark',
-						'parent_name' => 'options',
-						'priority' => 500
-					);
+				$items['bookmark'] = array(
+					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
+					'href' => $entity->getBookmarkURL(),
+					'class' => 'elgg-button-bookmark',
+					'parent_name' => 'options',
+					'priority' => 500
+				);
 			}
 
 			if ($entity->canWriteToContainer(0, 'object', 'hjforumpost')) {
@@ -189,13 +190,13 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 		case 'hjforum' :
 
 			if (HYPEFORUM_SUBSCRIPTIONS) {
-					$items['subscription'] = array(
-						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
-						'href' => $entity->getSubscriptionURL(),
-						'class' => 'elgg-button elgg-button-action elgg-button-subscription',
-						'parent_name' => 'options',
-						'priority' => 500
-					);
+				$items['subscription'] = array(
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'href' => $entity->getSubscriptionURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-subscription',
+					'parent_name' => 'options',
+					'priority' => 500
+				);
 			}
 
 			if ($entity->canWriteToContainer(0, 'object', 'hjforum') && HYPEFORUM_SUBFORUMS) {
@@ -235,21 +236,21 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 		case 'hjforumtopic' :
 
 			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
-					$items['subscription'] = array(
-						'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
-						'href' => $entity->getSubscriptionURL(),
-						'class' => 'elgg-button elgg-button-action elgg-button-subscription',
-						'priority' => 500
-					);
+				$items['subscription'] = array(
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'href' => $entity->getSubscriptionURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-subscription',
+					'priority' => 500
+				);
 			}
 
 			if (HYPEFORUM_BOOKMARKS) {
-					$items['bookmark'] = array(
-						'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
-						'href' => $entity->getBookmarkURL(),
-						'class' => 'elgg-button elgg-button-action elgg-button-bookmark',
-						'priority' => 500
-					);
+				$items['bookmark'] = array(
+					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
+					'href' => $entity->getBookmarkURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-bookmark',
+					'priority' => 500
+				);
 			}
 
 			if ($entity->canWriteToContainer(0, 'object', 'hjforumpost')) {
@@ -356,4 +357,18 @@ function hj_forum_register_dashboard_title_buttons($dashboard = 'site') {
 			}
 			break;
 	}
+}
+
+function hj_forum_owner_block_menu($hook, $type, $return, $params) {
+	$entity = elgg_extract('entity', $params);
+
+	if (HYPEFORUM_GROUP_FORUMS && elgg_instanceof($entity, 'group') && $entity->forums_enable !== 'no') {
+		$return[] = ElggMenuItem::factory(array(
+					'name' => 'group:forums',
+					'text' => elgg_echo('hj:forum:group'),
+					'href' => "forum/group/$entity->guid"
+				));
+	}
+
+	return $return;
 }
