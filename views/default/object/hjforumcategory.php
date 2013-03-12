@@ -36,7 +36,9 @@ $getter_options = array(
 	'inverse_relationship' => true,
 );
 
-$getter_options = hj_framework_get_order_by_clause('forum.sticky', 'DESC', $getter_options);
+if (!get_input("__ord_$list_id")) {
+	$getter_options = hj_framework_get_order_by_clause('forum.sticky', 'DESC', $getter_options);
+}
 
 $list_options = array(
 	'list_type' => 'table',
@@ -77,11 +79,6 @@ $list_options = array(
 $viewer_options = array(
 	'full_view' => true
 );
-
-//if (!get_input("__ord_$list_id", false)) {
-//	set_input("__ord_$list_id", 'e.last_action');
-//	set_input("__dir_$list_id", 'DESC');
-//}
 
 $content .= hj_framework_view_list($list_id, $getter_options, $list_options, $viewer_options, 'elgg_get_entities_from_relationship');
 

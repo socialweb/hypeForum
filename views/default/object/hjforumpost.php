@@ -27,10 +27,24 @@ if ($full) {
 	$description = elgg_view('framework/bootstrap/object/elements/description', $vars);
 	$menu = elgg_view('framework/bootstrap/object/elements/menu', $vars);
 
+	echo <<<__HTML
+<div class="hj-forum-post-header"></div>
+<div class="elgg-image-block hj-forum-post-body clearfix">
+	<div class="elgg-image hj-forum-post-left">
+		$author
+	</div>
+	<div class="elgg-body hj-forum-post-right clearfix">
+		<div class="hj-forum-post-icons">$icon</div>
+		<div class="hj-forum-post-time">$friendly_time</div>
+		<div class="hj-forum-post-description">$description</div>
+		<div class="hj-forum-post-signature">$author_signature</div>
+	</div>
+</div>
+<div class="hj-forum-post-footer clearfix">
+	$menu
+</div>
+__HTML;
 
-	echo elgg_view_image_block($author, $icon . $friendly_time . $description . $author_signature, array(
-		'image_alt' => $menu
-	));
 } else {
 	echo $friendly_time . '<br />';
 	echo elgg_view('output/url', array(

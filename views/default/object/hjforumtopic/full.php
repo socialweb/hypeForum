@@ -9,7 +9,10 @@ if (HYPEFORUM_FORUM_TOPIC_COVER) {
 	$content .= elgg_view('framework/bootstrap/object/elements/cover', $vars);
 }
 
+$content .= '<div class="hj-forum-topic-original-post">';
 $content .= elgg_view('object/hjforumtopic/elements/original_post', $vars);
+$content .= '</div>';
+
 
 $list_id = "ft$entity->guid";
 
@@ -26,7 +29,7 @@ $limit = get_input("__lim_$list_id", 10);
 
 $list_options = array(
 	'list_type' => 'list',
-	'list_class' => 'hj-forumtopic',
+	'list_class' => 'hj-forum-topic-posts-list',
 	'list_view_options' => array(),
 	'pagination' => true,
 );
