@@ -27,6 +27,8 @@ if ($full) {
 	$description = elgg_view('framework/bootstrap/object/elements/description', $vars);
 	$menu = elgg_view('framework/bootstrap/object/elements/menu', $vars);
 
+	$quote = elgg_view('framework/forum/quote', array('entity' => get_entity($entity->quote)));
+
 	echo <<<__HTML
 <div class="hj-forum-post-header"></div>
 <div class="elgg-image-block hj-forum-post-body clearfix">
@@ -36,7 +38,7 @@ if ($full) {
 	<div class="elgg-body hj-forum-post-right clearfix">
 		<div class="hj-forum-post-icons">$icon</div>
 		<div class="hj-forum-post-time">$friendly_time</div>
-		<div class="hj-forum-post-description">$description</div>
+		<div class="hj-forum-post-description">$quote$description</div>
 		<div class="hj-forum-post-signature">$author_signature</div>
 	</div>
 </div>

@@ -41,7 +41,7 @@ function hj_forum_get_latest_topics($container_guid, $limit = 10, $count = false
 function hj_forum_get_latest_posts($container_guid, $limit = 10, $count = false, $recursive = false) {
 	$options = array(
 		'types' => 'object',
-		'subtypes' => 'hjforumpost',
+		'subtypes' => array('hjforumpost', 'hjforumtopic'),
 		'count' => $count,
 		'limit' => $limit,
 		'relationship' => 'descendant',

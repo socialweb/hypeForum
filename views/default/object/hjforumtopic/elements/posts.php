@@ -6,4 +6,4 @@ if (!$entity) {
 	return false;
 }
 
-echo $entity->countPosts(true);
+echo $entity->countPosts(true) + 1;

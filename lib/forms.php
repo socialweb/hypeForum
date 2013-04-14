@@ -114,7 +114,7 @@ function hj_forum_init_forum_form($hook, $type, $return, $params) {
 				'input_type' => 'longtext',
 				'class' => 'elgg-input-longtext',
 			),
-			'category' => (HYPEFORUM_CATEGORIES_TOP) ? hj_forum_get_forum_category_input_options($entity, $container) : null,
+			'category' => hj_forum_get_forum_category_input_options($entity, $container),
 			'enable_subcategories' => (HYPEFORUM_CATEGORIES) ? array(
 				'input_type' => 'checkboxes',
 				'options' => array(
@@ -189,7 +189,7 @@ function hj_forum_init_forumtopic_form($hook, $type, $return, $params) {
 				'label' => false,
 				'default' => false
 					) : null,
-			'category' => (HYPEFORUM_CATEGORIES) ? hj_forum_get_forum_category_input_options($entity, $container) : null,
+			'category' => hj_forum_get_forum_category_input_options($entity, $container),
 			'access_id' => array(
 				'value' => $entity->access_id,
 				'input_type' => 'access'
@@ -229,6 +229,8 @@ function hj_forum_init_forumpost_form($hook, $type, $return, $params) {
 				'input_type' => 'hidden',
 				'value' => "Re: $entity->title",
 			),
+			'quote' => null,
+			'quote_text' => null,
 			'description' => array(
 				'value' => $entity->description,
 				'input_type' => 'longtext',
@@ -250,7 +252,11 @@ function hj_forum_init_forumpost_form($hook, $type, $return, $params) {
 	if (!$entity && $quote) {
 		$quoted_entity = get_entity($quote);
 		if ($quoted_entity) {
-			$config['fields']['description']['value'] = elgg_view('framework/forum/quote', array('entity' => $quoted_entity));
+			$config['fields']['quote_text'] = array(
+				'value' => $quoted_entity->description,
+				'override_view' => 'output/longtext',
+				'label' => false
+				);
 			$config['fields']['quote'] = array(
 				'input_type' => 'hidden',
 				'value' => $quote
@@ -299,6 +305,14 @@ function hj_forum_init_forumcategory_form($hook, $type, $return, $params) {
 }
 
 function hj_forum_get_forum_category_input_options($entity = null, $container = null) {
+
+	if ((elgg_instanceof($container, 'site') || elgg_instanceof($container, 'group')) && !HYPEFORUM_CATEGORIES_TOP) {
+		return false;
+	}
+
+	if (elgg_instanceof($container, 'object', 'hjforum') && !HYPEFORUM_CATEGORIES) {
+		return false;
+	}
 
 	if (!$entity && !$container)
 		return false;

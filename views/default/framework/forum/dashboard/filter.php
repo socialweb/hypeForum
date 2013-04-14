@@ -15,13 +15,13 @@ $tabs = array(
 		'selected' => ($filter_context == 'groups'),
 		'priority' => 200,
 	) : null,
-	'bookmarks' => (HYPEFORUM_BOOKMARKS) ? array(
+	'bookmarks' => (HYPEFORUM_BOOKMARKS && elgg_is_logged_in()) ? array(
 		'text' => elgg_echo('hj:forum:dashboard:tabs:bookmarks'),
 		'href' => 'forum/dashboard/bookmarks',
 		'selected' => ($filter_context == 'bookmarks'),
 		'priority' => 300,
 	) : null,
-	'subscriptions' => (HYPEFORUM_SUBSCRIPTIONS) ? array(
+	'subscriptions' => (HYPEFORUM_SUBSCRIPTIONS && elgg_is_logged_in()) ? array(
 		'text' => elgg_echo('hj:forum:dashboard:tabs:subscriptions'),
 		'href' => 'forum/dashboard/subscriptions',
 		'selected' => ($filter_context == 'subscriptions'),
