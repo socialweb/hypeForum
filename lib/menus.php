@@ -29,11 +29,11 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 		case 'hjforum' :
 
-			if (HYPEFORUM_SUBSCRIPTIONS) {
+			if (HYPEFORUM_SUBSCRIPTIONS && elgg_is_logged_in()) {
 				$items['subscription'] = array(
-					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
-					'class' => 'elgg-button-subscription',
+					'class' => 'elgg-button-forum-subscription',
 					'parent_name' => 'options',
 					'priority' => 500
 				);
@@ -81,21 +81,21 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 		case 'hjforumtopic' :
 
-			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
+			if (HYPEFORUM_SUBSCRIPTIONS && elgg_is_logged_in()) {
 				$items['subscription'] = array(
-					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
-					'class' => 'elgg-button-subscription',
+					'class' => ($entity->isSubscribed()) ? 'elgg-button-forum-subscription elgg-state-active' : 'elgg-button-forum-subscription',
 					'parent_name' => 'options',
 					'priority' => 500
 				);
 			}
 
-			if (HYPEFORUM_BOOKMARKS) {
+			if (HYPEFORUM_BOOKMARKS && elgg_is_logged_in()) {
 				$items['bookmark'] = array(
-					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
+					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:forum:bookmark:remove') : elgg_echo('hj:forum:bookmark:create'),
 					'href' => $entity->getBookmarkURL(),
-					'class' => 'elgg-button-bookmark',
+					'class' => ($entity->isBookmarked()) ? 'elgg-button-forum-bookmark elgg-state-active' : 'elgg-button-forum-bookmark',
 					'parent_name' => 'options',
 					'priority' => 500
 				);
@@ -191,9 +191,9 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 
 			if (HYPEFORUM_SUBSCRIPTIONS) {
 				$items['subscription'] = array(
-					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
-					'class' => 'elgg-button elgg-button-action elgg-button-subscription',
+					'class' => ($entity->isSubscribed()) ? 'elgg-button elgg-button-action elgg-button-forum-subscription elgg-state-active' : 'elgg-button elgg-button-action elgg-button-forum-subscription',
 					'parent_name' => 'options',
 					'priority' => 500
 				);
@@ -237,18 +237,18 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 
 			if (HYPEFORUM_SUBSCRIPTIONS && !$entity->getContainerEntity()->isSubscribed()) {
 				$items['subscription'] = array(
-					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:framework:subscription:remove') : elgg_echo('hj:framework:subscription:create'),
+					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
-					'class' => 'elgg-button elgg-button-action elgg-button-subscription',
+					'class' => ($entity->isSubscribed()) ? 'elgg-button-forum-subscription elgg-state-active' : 'elgg-button-forum-subscription',
 					'priority' => 500
 				);
 			}
 
 			if (HYPEFORUM_BOOKMARKS) {
 				$items['bookmark'] = array(
-					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:framework:bookmark:remove') : elgg_echo('hj:framework:bookmark:create'),
+					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:forum:bookmark:remove') : elgg_echo('hj:forum:bookmark:create'),
 					'href' => $entity->getBookmarkURL(),
-					'class' => 'elgg-button elgg-button-action elgg-button-bookmark',
+					'class' => ($entity->isBookmarked()) ? 'elgg-button elgg-button-action elgg-button-forum-bookmark elgg-state-active' : 'elgg-button elgg-button-action elgg-button-forum-bookmark',
 					'priority' => 500
 				);
 			}

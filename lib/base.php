@@ -67,19 +67,6 @@ function hj_forum_notify_subscribed_users($guid) {
 
 	$subscribers = $entity->getSubscribedUsers();
 
-//	foreach ($ancestry as $ancestor) {
-//		if ($ancestor instanceof hjObject) {
-//			$users = $ancestor->getSubscribedUsers();
-//			if ($users) {
-//				foreach ($users as $u) {
-//					if ($u->guid != $entity->guid) {
-//						$subscribers[] = $u->guid;
-//					}
-//				}
-//			}
-//		}
-//	}
-
 	$subtype = $entity->getSubtype();
 	
 	$from = elgg_get_site_entity()->guid;

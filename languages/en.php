@@ -135,7 +135,19 @@ $english = array(
 
 	'edit:plugin:user:hypeforum:params[hypeforum_signature]' => 'Add signature to my forum posts:',
 
-	
+	'hj:forum:bookmark:create' => 'Bookmark',
+	'hj:forum:bookmark:remove' => 'Remove Bookmark',
+	'hj:forum:bookmark:create:error' => 'Item can not be bookmarked',
+	'hj:forum:bookmark:create:success' => 'Item successfully bookmarked',
+	'hj:forum:bookmark:remove:error' => 'Bookmark can not be removed',
+	'hj:forum:bookmark:remove:success' => 'Bookmark successfully removed',
+
+	'hj:forum:subscription:create' => 'Subscribe',
+	'hj:forum:subscription:remove' => 'Unsubscribe',
+	'hj:forum:subscription:create:error' => 'You can\'t subscribe to this item',
+	'hj:forum:subscription:create:success' => 'You are now subscribed to this item',
+	'hj:forum:subscription:remove:error' => 'Can not unsubscribe from this item',
+	'hj:forum:subscription:remove:success' => 'You are no longer subscribed to this item',
 	
 	
 );
