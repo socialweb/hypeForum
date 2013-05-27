@@ -31,12 +31,14 @@ if ($result) {
 		}
 	}
 
-	elgg_set_viewtype('default');
-	$view = "<li id=\"elgg-object-{$entity->guid}\" class=\"elgg-item\">";
-	$view .= elgg_view_entity($entity);
-	$view .= '</li>';
+	if (elgg_is_xhr()) {
+		elgg_set_viewtype('default');
+		$view = "<li id=\"elgg-object-{$entity->guid}\" class=\"elgg-item\">";
+		$view .= elgg_view_entity($entity);
+		$view .= '</li>';
 
-	print json_encode(array('guid' => $entity->guid, 'view' => $view));
+		print json_encode(array('guid' => $entity->guid, 'view' => $view));
+	}
 	forward($result['forward']);
 } else {
 	forward(REFERER);

@@ -13,8 +13,10 @@ if (check_entity_relationship(elgg_get_logged_in_user_guid(), 'subscribed', $gui
 		'count' => true
 			));
 
-	print json_encode(array('count' => $count));
-
+	if (elgg_is_xhr()) {
+		print json_encode(array('count' => $count));
+	}
+	
 	system_message(elgg_echo('hj:forum:subscription:remove:success'));
 	forward(REFERER);
 }
