@@ -7,7 +7,7 @@
  * @subpackage hypeForum
  *
  * @author Ismayil Khayredinov <ismayil.khayredinov@gmail.com>
- * @copyright Copyrigh (c) 2011-2013, Ismayil Khayredinov
+ * @copyright Copyright (c) 2011-2013, Ismayil Khayredinov
  */
 
 define('HYPEFORUM_RELEASE', 1361379905);
