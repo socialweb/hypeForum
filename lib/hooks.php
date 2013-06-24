@@ -9,6 +9,9 @@ elgg_register_plugin_hook_handler('custom_sql_clause', 'framework:lists', 'hj_fo
 // Allow users to use forums as container entities
 elgg_register_plugin_hook_handler('container_permissions_check', 'object', 'hj_forum_container_permissions_check');
 
+// Override commenting on forums
+elgg_register_plugin_hook_handler('permissions_check:comment', 'object', 'hj_forum_disable_comments');
+
 /**
  * Custom clauses for forum ordering
  */
@@ -155,6 +158,24 @@ function hj_forum_container_permissions_check($hook, $type, $return, $params) {
 					return ($container->isOpenFor($subtype));
 					break;
 			}
+			break;
+	}
+}
+
+function hj_forum_disable_comments($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+
+	switch($entity->getSubtype()) {
+		case 'hjforum' :
+		case 'hjforumtopic' :
+		case 'hjforumcategory' :
+		case 'hjforumpost' :
+			return false;
+			break;
+
+		default :
+			return $return;
 			break;
 	}
 }

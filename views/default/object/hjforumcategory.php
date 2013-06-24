@@ -12,13 +12,13 @@ if ($container->canEdit()) {
 
 $params = array(
 	'entity' => $entity,
-	'class' => 'elgg-menu-hjentityhead elgg-menu-hz elgg-menu-forum-category',
+	'class' => 'elgg-menu-hz elgg-menu-forum-category',
 	'sort_by' => 'priority',
 	'handler' => 'forumcategory',
 	'dropdown' => false
 );
 
-$menu = elgg_view_menu('hjentityhead', $params);
+$menu = elgg_view_menu('entity', $params);
 
 $title = elgg_view_image_block($handle, $title, array(
 	'image_alt' => $menu

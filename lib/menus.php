@@ -7,7 +7,7 @@ elgg_register_menu_item('site', array(
 	'href' => 'forum',
 ));
 
-elgg_register_plugin_hook_handler('register', 'menu:hjentityhead', 'hj_forum_entity_menu');
+elgg_register_plugin_hook_handler('register', 'menu:entity', 'hj_forum_entity_menu');
 elgg_register_plugin_hook_handler('register', 'menu:title', 'hj_forum_entity_title_menu');
 elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'hj_forum_owner_block_menu');
 
@@ -20,6 +20,26 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 	if (!$entity instanceof hjObject)
 		return $return;
+
+
+	if ($entity->canEdit()) {
+		$items['edit'] = array(
+			'text' => elgg_echo('edit'),
+			'href' => $entity->getEditURL(),
+			'class' => 'elgg-button-edit-entity',
+			'data-toggle' => 'dialog',
+			'data-callback' => 'refresh:lists::framework',
+			'data-uid' => $entity->guid,
+			'priority' => 995
+		);
+		$items['delete'] = array(
+			'text' => elgg_echo('delete'),
+			'href' => $entity->getDeleteURL(),
+			'class' => 'elgg-button-delete-entity',
+			'data-uid' => $entity->guid,
+			'priority' => 1000
+		);
+	}
 
 	switch ($entity->getSubtype()) {
 
@@ -34,7 +54,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
 					'class' => 'elgg-button-forum-subscription',
-					'parent_name' => 'options',
 					'priority' => 500
 				);
 			}
@@ -44,7 +63,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:subforum'),
 					'href' => "forum/create/forum/$entity->guid",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 850
@@ -56,7 +74,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:topic'),
 					'href' => "forum/create/topic/$entity->guid",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 855
@@ -68,14 +85,11 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:category'),
 					'href' => "forum/create/category/$entity->guid",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-callback' => 'refresh:lists::framework',
 					'data-toggle' => 'dialog',
 					'priority' => 860
 				);
 			}
-
-
 
 			break;
 
@@ -86,7 +100,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
 					'class' => ($entity->isSubscribed()) ? 'elgg-button-forum-subscription elgg-state-active' : 'elgg-button-forum-subscription',
-					'parent_name' => 'options',
 					'priority' => 500
 				);
 			}
@@ -96,7 +109,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => ($entity->isBookmarked()) ? elgg_echo('hj:forum:bookmark:remove') : elgg_echo('hj:forum:bookmark:create'),
 					'href' => $entity->getBookmarkURL(),
 					'class' => ($entity->isBookmarked()) ? 'elgg-button-forum-bookmark elgg-state-active' : 'elgg-button-forum-bookmark',
-					'parent_name' => 'options',
 					'priority' => 500
 				);
 			}
@@ -106,7 +118,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:post'),
 					'href' => "forum/create/post/$entity->guid#reply",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 850
@@ -115,7 +126,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:post:quote'),
 					'href' => "forum/create/post/$entity->guid?quote=$entity->guid#reply",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 850
@@ -131,29 +141,24 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'text' => elgg_echo('hj:forum:create:post:quote'),
 					'href' => "forum/create/post/$topic->guid?quote=$entity->guid#reply",
 					'class' => 'elgg-button-create-entity',
-					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 850
 				);
 			}
 			break;
-			break;
 
 		case 'hjforumcategory' :
 
 			if ($entity->canEdit()) {
-				$items = array(
-					'edit' => array(
-						'text' => elgg_echo('edit'),
-						'href' => $entity->getEditURL(),
-						'parent_name' => 'options',
-						'class' => 'elgg-button-edit-entity',
-						'data-toggle' => 'dialog',
-						'data-callback' => 'editedcategory::framework:forum',
-						'data-uid' => $entity->guid,
-						'priority' => 850
-					),
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-callback' => 'editedcategory::framework:forum',
+					'data-uid' => $entity->guid,
+					'priority' => 850
 				);
 			}
 
@@ -194,7 +199,6 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 					'text' => ($entity->isSubscribed()) ? elgg_echo('hj:forum:subscription:remove') : elgg_echo('hj:forum:subscription:create'),
 					'href' => $entity->getSubscriptionURL(),
 					'class' => ($entity->isSubscribed()) ? 'elgg-button elgg-button-action elgg-button-forum-subscription elgg-state-active' : 'elgg-button elgg-button-action elgg-button-forum-subscription',
-					'parent_name' => 'options',
 					'priority' => 500
 				);
 			}
@@ -265,7 +269,6 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 				$items['create:forumpost:quote'] = array(
 					'text' => elgg_echo('hj:forum:create:post:quote'),
 					'href' => "forum/create/post/$entity->guid?quote=$entity->guid#reply",
-					'class' => 'elgg-button-create-entity',
 					'parent_name' => 'options',
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
