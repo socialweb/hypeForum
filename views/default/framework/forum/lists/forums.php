@@ -6,11 +6,6 @@ $subtypes = elgg_extract('subtypes', $vars, array('hjforum', 'hjforumtopic'));
 
 $title = false;
 
-$subtype_ids = implode(',', array(
-	get_subtype_id('object', 'hjforum'),
-	get_subtype_id('object', 'hjforumtopic')
-		));
-
 $getter_options = array(
 	'types' => 'object',
 	'subtypes' => $subtypes,
