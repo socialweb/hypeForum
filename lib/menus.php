@@ -18,7 +18,7 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 
 	$entity = elgg_extract('entity', $params, false);
 
-	if (!$entity instanceof hjObject)
+	if (!elgg_instanceof($entity))
 		return $return;
 
 	switch ($entity->getSubtype()) {
