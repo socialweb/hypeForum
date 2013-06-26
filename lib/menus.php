@@ -21,26 +21,6 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 	if (!$entity instanceof hjObject)
 		return $return;
 
-
-	if ($entity->canEdit()) {
-		$items['edit'] = array(
-			'text' => elgg_echo('edit'),
-			'href' => $entity->getEditURL(),
-			'class' => 'elgg-button-edit-entity',
-			'data-toggle' => 'dialog',
-			'data-callback' => 'refresh:lists::framework',
-			'data-uid' => $entity->guid,
-			'priority' => 995
-		);
-		$items['delete'] = array(
-			'text' => elgg_echo('delete'),
-			'href' => $entity->getDeleteURL(),
-			'class' => 'elgg-button-delete-entity',
-			'data-uid' => $entity->guid,
-			'priority' => 1000
-		);
-	}
-
 	switch ($entity->getSubtype()) {
 
 		default :
@@ -91,6 +71,24 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 				);
 			}
 
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-callback' => 'refresh:lists::framework',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
 			break;
 
 		case 'hjforumtopic' :
@@ -131,6 +129,24 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'priority' => 850
 				);
 			}
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-callback' => 'refresh:lists::framework',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
 			break;
 
 
@@ -146,6 +162,25 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'priority' => 850
 				);
 			}
+
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-callback' => 'refresh:lists::framework',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
 			break;
 
 		case 'hjforumcategory' :
@@ -159,6 +194,13 @@ function hj_forum_entity_menu($hook, $type, $return, $params) {
 					'data-callback' => 'editedcategory::framework:forum',
 					'data-uid' => $entity->guid,
 					'priority' => 850
+				);
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
 				);
 			}
 
@@ -187,7 +229,7 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 
 	$entity = elgg_extract('entity', $params, false);
 
-	if (!$entity instanceof hjObject)
+	if (!elgg_instanceof($entity))
 		return $return;
 
 	switch ($entity->getSubtype()) {
@@ -235,6 +277,25 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 				);
 			}
 
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button elgg-button-delete elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
+				);
+			}
+
 			break;
 
 		case 'hjforumtopic' :
@@ -273,6 +334,25 @@ function hj_forum_entity_title_menu($hook, $type, $return, $params) {
 					'data-toggle' => 'dialog',
 					'data-callback' => 'refresh:lists::framework',
 					'priority' => 850
+				);
+			}
+
+			if ($entity->canEdit()) {
+				$items['edit'] = array(
+					'text' => elgg_echo('edit'),
+					'href' => $entity->getEditURL(),
+					'class' => 'elgg-button elgg-button-action elgg-button-edit-entity',
+					'data-toggle' => 'dialog',
+					'data-uid' => $entity->guid,
+					'priority' => 995
+				);
+
+				$items['delete'] = array(
+					'text' => elgg_echo('delete'),
+					'href' => $entity->getDeleteURL(),
+					'class' => 'elgg-button elgg-button-delete elgg-button-delete-entity',
+					'data-uid' => $entity->guid,
+					'priority' => 1000
 				);
 			}
 			break;
