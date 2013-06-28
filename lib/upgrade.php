@@ -13,6 +13,7 @@ run_function_once('hj_forum_1360277917');
 run_function_once('hj_forum_1360948016');
 run_function_once('hj_forum_1360948621');
 run_function_once('hj_forum_1361379905');
+run_function_once('hj_forum_1372438394');
 
 elgg_set_ignore_access($ia);
 
@@ -230,4 +231,9 @@ function hj_forum_1361379905() {
 	foreach ($data as $e) {
 		create_metadata($e->guid, 'priority', 0, '', $e->owner_guid, ACCESS_PUBLIC);
 	}
+}
+
+function hj_forum_1372438394() {
+	add_metastring('priority');
+	add_metastring('sticky');
 }

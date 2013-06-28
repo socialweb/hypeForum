@@ -10,7 +10,7 @@
  * @copyright Copyright (c) 2011-2013, Ismayil Khayredinov
  */
 
-define('HYPEFORUM_RELEASE', 1361379905);
+define('HYPEFORUM_RELEASE', 1372438394);
 
 define('HYPEFORUM_CATEGORIES', elgg_get_plugin_setting('categories', 'hypeForum'));
 define('HYPEFORUM_CATEGORIES_TOP', elgg_get_plugin_setting('categories_top', 'hypeForum'));
@@ -30,7 +30,7 @@ define('HYPEFORUM_USER_SIGNATURE', elgg_get_plugin_setting('forum_user_signature
 elgg_register_event_handler('init', 'system', 'hj_forum_init');
 
 function hj_forum_init() {
-
+	
 	$plugin = 'hypeForum';
 
 	// Make sure hypeFramework is active and precedes hypeForum in the plugin list
